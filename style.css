@@ -31,6 +31,14 @@ header {
   height: fit-content;
   position: static;
   top: 0;
+  display: flex;
+  gap: 1.5em;
+}
+
+header > img{
+  filter: invert(12%) sepia(80%) saturate(200%) hue-rotate(90deg) brightness(1.2) contrast(1) drop-shadow(2px 2px 0 black);
+  width: calc(105px / 1.2);
+  position: relative;
 }
 
 #header {
@@ -38,9 +46,10 @@ header {
   font-size: 4em;
   text-align: left;
   position: relative;
-  left: 32px;
+  left: 16px;
   width: fit-content;
   margin: 12px;
+  text-shadow: 2px 2px 0 black;
 }
 
 main {
@@ -54,6 +63,7 @@ main {
   background-image: url("background.png");
   background-position: center;
   background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .mybutton {
@@ -84,6 +94,7 @@ main {
   position: relative;
   width: 100%;
   height: 100%;
+  text-shadow: 2px 2px 0 black;
 }
 
 footer {
@@ -93,19 +104,19 @@ footer {
   align-items: center;
   background-color: var(--footer);
   padding: 0 6px; /* Ändert abstand vom Rand */
+  transition: .5s all ease;
 }
 
 .text {
   color: var(--textcolor);
   letter-spacing: 2px;
   font-size: 1.8em;
+  text-shadow: 2px 2px 0 black;
 }
 
 .icon{
   color: var(--textcolor);
-    scale: 3;
-    position: relative;
-    left: calc(100% - 5%);
+
 }
 
 .close{
@@ -122,5 +133,6 @@ footer {
 }
 
 .hide{
-    display: none;
+    position: absolute;
+    top: -9600px;
 }
