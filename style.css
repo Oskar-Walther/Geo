@@ -8,12 +8,12 @@
 }
 
 :root {
-  --bgcolor: #FFFFFF;
-  --textcolor: #000000;
-  --buttoncolor: #C72B32;
-  --buttonhover: #b3161e;
-  --mainbackground: #205A28;
-  --fotterbg: #ffffff;
+  --bgcolor: #466161;
+  --textcolor: #ffffff;
+  --buttoncolor: rgb(63, 6, 100);
+  --buttonhover: rgb(117, 33, 124);
+  --mainbackground: #2e2d75;
+  --fotterbg: #f30c0c;
 }
 
 body {

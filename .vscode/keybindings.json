@@ -1,7 +1,5 @@
-[
-    {
-        "key": "ctrl+alt+n",
-        "command": "workbench.action.tasks.runTask",
-        "args": "create-branch-and-push"
-    }
-]
+{
+    "key": "ctrl+h",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Run tests"
+  }
