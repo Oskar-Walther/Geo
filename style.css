@@ -104,7 +104,7 @@ footer {
   align-items: center;
   background-color: var(--footer);
   padding: 0 6px; /* Ändert abstand vom Rand */
-  transition: .5s all ease;
+  transition: 10s all ease;
 }
 
 .text {
@@ -133,6 +133,5 @@ footer {
 }
 
 .hide{
-    position: absolute;
-    top: -9600px;
+  opacity: 0;
 }
