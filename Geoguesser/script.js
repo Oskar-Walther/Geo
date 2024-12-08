@@ -13,14 +13,18 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png
     minZoom: 4,
     subdomains: 'abcd'
 }).addTo(map);
-                            // Nordkap
-const locations = [[71.15939141681443,25.488281250000004],]
+
+// Nordkap location
+const nordkap = [71.15939141681443, 25.488281250000004];
+let currentLine = null;
+
+const maxpoints = 5000;
+const minpoints = 0;
 
 map.on('click', function(e) {
     var lat = e.latlng.lat;
     var lng = e.latlng.lng;
 
-    
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // Earth's radius in kilometers
         const toRadians = (degree) => degree * (Math.PI / 180);
@@ -37,6 +41,31 @@ map.on('click', function(e) {
     
         return R * c; // Distance in kilometers
     }
+
+    // Calculate distance
+    const distance = Math.round(calculateDistance(lat, lng, nordkap[0], nordkap[1]));
+    console.log(`Distance: ${distance} km`);
+
+    // Remove the previous line if it exists
+    if (currentLine) {
+        map.removeLayer(currentLine);
+    }
+
+    // Draw a new line between the clicked point and Nordkap
+    currentLine = L.polyline([[lat, lng], nordkap], { color: 'red', weight: 2 }).addTo(map);
+
+    result = Calcresult(distance, 100, 0.8)
+
+    function Calcresult(distance, radius, factor){
+        if(maxpoints - distance >= maxpoints - radius){
+            return maxpoints;
+        } else{
+            return Math.round((maxpoints - (distance - radius) / factor));
+        }
+        
+    }
+
+    if(result <= 0) result = 0;
+    console.log(result);
     
-    console.log(`Distance: ${Math.round(calculateDistance(lat, lng, locations[0][0], locations[0][1]))} km`); 
 });

@@ -9,12 +9,13 @@
 
 :root {
   --bgcolor: rgb(35, 35, 43);
-  --textcolor: rgb(255, 0, 0);
+  --textcolor: rgb(190, 0, 0);
   --buttoncolor: rgba(100, 6, 45, 0);
-  --buttonhover: rgb(140, 34, 150);
-  --mainbackground: #743030;
+  --buttonhover: rgb(255, 0, 0);
+  --mainbackground:rgb(82, 49, 11) ;
   --fotterbg: #000000;
-  --footer:rgb(39, 39, 100) ;
+  --footer:rgb(35, 35, 43);
+  --closebg:rgb(35, 35, 43);
 }
 
 body {
@@ -86,10 +87,12 @@ main {
 }
 
 footer {
-  height: 100px;
-  display: flex;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   background-color: var(--footer);
+  padding: 0 6px; /* Ändert abstand vom Rand */
 }
 
 .text {
@@ -109,7 +112,7 @@ footer {
     position: absolute;
     bottom: 0;
     left: 16px;
-    background-color: var(--buttoncolor);
+    background-color: var(--closebg);
     border: none;
     border-radius: 6px 6px 0 0;
     width: calc(100% - 98%);
