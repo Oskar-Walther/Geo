@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Audiowide", sans-serif;
+}
+
+:root {
+  --bgcolor: #FFFFFF;
+  --textcolor: #000000;
+  --buttoncolor: #C72B32;
+  --buttonhover: #b3161e;
+  --mainbackground: #205A28;
+  --fotterbg: #ffffff;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: scroll;
+  background-color: var(--bgcolor);
+  display: grid;
+  grid-area: "header" "main" "footer";
+  grid-template-rows: auto 1fr auto;
+}
+
+header {
+  height: fit-content;
+  position: static;
+  top: 0;
+}
+
+#header {
+  color: var(--textcolor);
+  font-size: 4em;
+  text-align: left;
+  position: relative;
+  left: 32px;
+  width: fit-content;
+  margin: 12px;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1 1 0;
+  position: relative;
+  background-color:var(--mainbackground);
+}
+
+.mybutton {
+  padding: 12px;
+  font-size: 4em;
+  background-color: var(--buttoncolor);
+  border: 6px solid var(--textcolor);
+  border-radius: 6px;
+  width: calc(100% - 80%);
+  cursor: pointer;
+  transition: 0.5s all ease;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  place-items: center;
+}
+
+
+.mybutton:hover {
+  background-color: var(--buttonhover);
+  scale: 1.1;
+  animation: none;
+}
+
+.mybutton > a {
+  color: var(--textcolor);
+  text-decoration: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+footer {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(12, 12, 12);
+}
+
+.text {
+  color: white;
+  letter-spacing: 2px;
+  font-size: 1.8em;
+  
+}
+
+.icon{
+    color: white;
+    scale: 3;
+    position: relative;
+    left: calc(100% - 5%);
+}
+
+.close{
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    background-color: var(--buttoncolor);
+    border: none;
+    border-radius: 6px 6px 0 0;
+    width: calc(100% - 98%);
+    font-size: 1em;
+    color: white;
+    cursor: pointer;
+}
+
+.hide{
+    display: none;
+}
