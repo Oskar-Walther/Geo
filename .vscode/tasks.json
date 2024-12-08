@@ -4,7 +4,8 @@
         {
             "label": "push",
             "type": "shell",
-            "command": "git push -u origin main"
+            "command": "git push -u origin main",
+            "args": []
         },
         {
             "label": "add",

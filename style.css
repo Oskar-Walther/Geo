@@ -8,12 +8,13 @@
 }
 
 :root {
-  --bgcolor: #466161;
-  --textcolor: #ffffff;
-  --buttoncolor: rgb(63, 6, 100);
-  --buttonhover: rgb(117, 33, 124);
-  --mainbackground: #2e2d75;
+  --bgcolor: rgb(35, 35, 43);
+  --textcolor: rgb(255, 0, 0);
+  --buttoncolor: rgba(100, 6, 45, 0);
+  --buttonhover: rgb(140, 34, 150);
+  --mainbackground: #000000;
   --fotterbg: #f30c0c;
+  --footer:rgb(19, 19, 175) ;
 }
 
 body {
@@ -49,6 +50,9 @@ main {
   flex: 1 1 0;
   position: relative;
   background-color:var(--mainbackground);
+  background-image: url("background.png");
+  background-position: center;
+  background-size: contain;
 }
 
 .mybutton {
@@ -85,18 +89,17 @@ footer {
   height: 100px;
   display: flex;
   align-items: center;
-  background-color: rgb(12, 12, 12);
+  background-color: var(--footer);
 }
 
 .text {
-  color: white;
+  color: var(--textcolor);
   letter-spacing: 2px;
   font-size: 1.8em;
-  
 }
 
 .icon{
-    color: white;
+  color: var(--textcolor);
     scale: 3;
     position: relative;
     left: calc(100% - 5%);
@@ -111,7 +114,7 @@ footer {
     border-radius: 6px 6px 0 0;
     width: calc(100% - 98%);
     font-size: 1em;
-    color: white;
+    color: var(--textcolor);
     cursor: pointer;
 }
 
