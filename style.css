@@ -19,6 +19,8 @@
   --headcolor:rgb(231, 40, 40);
   --maintextcolor: rgb(255, 0, 0);
   --centercolor: rgb(253, 4, 4);
+  --fullscreencolor: rgb(105, 105, 104);
+  --fullscreencolorhover: rgb(147, 168, 147);
 }
 
 body {
@@ -92,7 +94,7 @@ main img{
   transition: 0.5s all ease;
   position: relative;
   display: grid;
-  grid-template-columns: 25% 1fr;
+  grid-template-columns: 1fr;
   place-items: center;
   z-index: 2;
 
@@ -101,8 +103,10 @@ main img{
     height: 50px;
     display: block;
     width: fit-content;
-    position: relative;
+    position: absolute;
     filter: drop-shadow(4px -4px 0 black);
+    pointer-events: none;
+    left: 16px;
   }
 }
 
@@ -116,9 +120,10 @@ main img{
   color: var(--centercolor);
   text-decoration: none;
   position: relative;
-  width: 100%;
+  width: fit-content;
   height: 100%;
   text-shadow: 2px 2px 0 black;
+  text-align: center;
 }
 
 footer {
@@ -173,13 +178,18 @@ footer {
   border: none;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  height: fit-content;
+  width: 38px;
+  height: 38px;
   position: absolute;
   top: 0;
   right: 0;
   cursor: pointer;
   padding: 6px;
+  fill: var(--fullscreencolor);
+}
+
+.fullscreen:hover{
+  fill: var(--fullscreencolorhover);
 }
 
 @keyframes fadein {
