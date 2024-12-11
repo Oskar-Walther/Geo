@@ -9,13 +9,15 @@
 
 :root {
   --bgcolor: rgb(35, 35, 43);
-  --textcolor: rgb(190, 0, 0);
+  --textcolor: rgb(255, 0, 0);
   --buttoncolor: rgba(100, 6, 45, 0);
-  --buttonhover: rgb(255, 0, 0);
+  --buttonhover: rgb(107, 7, 7);
   --mainbackground:rgb(82, 49, 11) ;
   --fotterbg: #000000;
   --footer:rgb(35, 35, 43);
   --closebg:rgb(35, 35, 43);
+  --headcolor:rgb(231, 40, 40);
+  --maintextcolor: rgb(103, 54, 54);
 }
 
 body {
@@ -25,6 +27,7 @@ body {
   display: grid;
   grid-area: "header" "main" "footer";
   grid-template-rows: auto 1fr auto;
+  animation: fadein 1s ease;
 }
 
 header {
@@ -36,13 +39,13 @@ header {
 }
 
 header > img{
-  filter: invert(12%) sepia(80%) saturate(200%) hue-rotate(90deg) brightness(1.2) contrast(1) drop-shadow(2px 2px 0 black);
+  filter: drop-shadow(2px 2px 0 black);
   width: calc(105px / 1.2);
   position: relative;
 }
 
 #header {
-  color: var(--textcolor);
+  color: var(--headcolor);
   font-size: 4em;
   text-align: left;
   position: relative;
@@ -73,14 +76,22 @@ main {
   border: 6px solid var(--textcolor);
   border-radius: 6px;
   width: calc(100% - 80%);
+  max-height: fit-content;
   cursor: pointer;
   transition: 0.5s all ease;
   position: relative;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 25% 1fr;
   place-items: center;
-}
 
+  svg{
+    fill: var(--textcolor);
+    height: 100%;
+    display: block;
+    width: fit-content;
+    position: relative;
+  }
+}
 
 .mybutton:hover {
   background-color: var(--buttonhover);
@@ -114,6 +125,13 @@ footer {
   text-shadow: 2px 2px 0 black;
 }
 
+.maintext {
+  color: var(--maintextcolor);
+  letter-spacing: 2px;
+  font-size: 1.8em;
+  text-shadow: 2px 2px 0 black;
+}
+
 .icon{
   color: var(--textcolor);
 
@@ -134,4 +152,14 @@ footer {
 
 .hide{
   display: none;
+}
+
+@keyframes fadein {
+  from{
+    opacity: 0;
+  }
+
+  to{
+    opacity: 1;
+  }
 }
