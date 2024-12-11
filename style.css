@@ -9,16 +9,16 @@
 
 :root {
   --bgcolor: rgb(35, 35, 43);
-  --textcolor: rgb(255, 4, 4);
+  --textcolor: rgb(252, 12, 12);
   --buttoncolor: rgba(100, 6, 45, 0);
   --buttonhover: rgb(107, 7, 7);
-  --mainbackground:rgb(82, 49, 11) ;
+  --mainbackground:rgb(10, 10, 10) ;
   --fotterbg: #000000;
   --footer:rgb(35, 35, 43);
   --closebg:rgb(35, 35, 43);
   --headcolor:rgb(231, 40, 40);
-  --maintextcolor: rgb(103, 54, 54);
-  --
+  --maintextcolor: rgb(255, 0, 0);
+  --centercolor: rgb(253, 4, 4);
 }
 
 body {
@@ -64,17 +64,27 @@ main {
   flex: 1 1 0;
   position: relative;
   background-color:var(--mainbackground);
-  background-image: url("background.png");
+  background-image: url("background2.jpg") !important;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
+  overflow: hidden;
+  width: 100%;
+}
+
+main img{
+  position: absolute;
+  z-index: 1;
+  scale: .6;
+  width: fit-content;
+  height: fit-content;
 }
 
 .mybutton {
   padding: 12px;
   font-size: 4em;
   background-color: var(--buttoncolor);
-  border: 6px solid var(--textcolor);
+  border: 6px solid var(--centercolor);
   border-radius: 6px;
   width: calc(100% - 80%);
   max-height: fit-content;
@@ -84,13 +94,15 @@ main {
   display: grid;
   grid-template-columns: 25% 1fr;
   place-items: center;
+  z-index: 2;
 
   svg{
-    fill: var(--textcolor);
-    height: 100%;
+    fill: var(--centercolor);
+    height: 50px;
     display: block;
     width: fit-content;
     position: relative;
+    filter: drop-shadow(4px -4px 0 black);
   }
 }
 
@@ -101,7 +113,7 @@ main {
 }
 
 .mybutton > a {
-  color: var(--textcolor);
+  color: var(--centercolor);
   text-decoration: none;
   position: relative;
   width: 100%;
@@ -115,8 +127,9 @@ footer {
   grid-template-columns: 1fr auto;
   align-items: center;
   background-color: var(--footer);
-  padding: 0 6px; /* Ändert abstand vom Rand */
+  padding: 0  30px; /* Ändert abstand vom Rand */
   transition: 10s all ease;
+  padding: 2em;
 }
 
 .text {
@@ -131,11 +144,6 @@ footer {
   letter-spacing: 2px;
   font-size: 1.8em;
   text-shadow: 2px 2px 0 black;
-}
-
-.icon{
-  color: var(--textcolor);
-
 }
 
 .close{
@@ -153,6 +161,25 @@ footer {
 
 .hide{
   display: none;
+}
+
+.small{
+  font-size: 1.4em !important;
+}
+
+.fullscreen{
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  padding: 6px;
 }
 
 @keyframes fadein {

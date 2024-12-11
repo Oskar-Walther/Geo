@@ -25,6 +25,17 @@ map.on('click', function(e) {
     var lat = e.latlng.lat;
     var lng = e.latlng.lng;
 
+    if (currentLine) {
+        map.removeLayer(currentLine);
+    }
+
+    // Draw a new line between the clicked point and Nordkap
+    currentLine = L.polyline([[lat, lng], nordkap], { color: 'red', weight: 2 }).addTo(map);
+
+    const confirm = document.querySelector("")
+});
+
+function resort(lat, lng){
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // Earth's radius in kilometers
         const toRadians = (degree) => degree * (Math.PI / 180);
@@ -46,14 +57,6 @@ map.on('click', function(e) {
     const distance = Math.round(calculateDistance(lat, lng, nordkap[0], nordkap[1]));
     console.log(`Distance: ${distance} km`);
 
-    // Remove the previous line if it exists
-    if (currentLine) {
-        map.removeLayer(currentLine);
-    }
-
-    // Draw a new line between the clicked point and Nordkap
-    currentLine = L.polyline([[lat, lng], nordkap], { color: 'red', weight: 2 }).addTo(map);
-
     result = Calcresult(distance, 100, 0.8)
 
     function Calcresult(distance, radius, factor){
@@ -67,5 +70,10 @@ map.on('click', function(e) {
 
     if(result <= 0) result = 0;
     console.log(result);
-    
-});
+    map.off('click');
+
+    setTimeout(() => {
+        const cover = document.querySelector(".cover");
+        cover.classList.remove("hide");
+    }, 1000);
+}
