@@ -32,7 +32,8 @@ map.on('click', function(e) {
     // Draw a new line between the clicked point and Nordkap
     currentLine = L.polyline([[lat, lng], nordkap], { color: 'red', weight: 2 }).addTo(map);
 
-    const confirm = document.querySelector("")
+    const confirm = document.querySelector(".confirm");
+    confirm.classList.remove("hide");
 });
 
 function resort(lat, lng){
