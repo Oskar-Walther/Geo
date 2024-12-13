@@ -17,6 +17,7 @@
   --scoretext: rgb(0, 0, 0);
   --fullscreencolor: rgb(190, 0, 0);
   --fullscreencolorhover: rgb(255, 1, 1);
+  --bordercolorclear: rgb(0,0,0);
 }
 
 body {
@@ -61,8 +62,8 @@ body {
   color: var(--generaltextcolor);
   border-radius: 40px;
   pointer-events: none;
-  border: 6px double blue;
-  padding: 1em;
+  border: 6px double var(--bordercolorclear);
+  padding: 7rem;
 }
 
 
