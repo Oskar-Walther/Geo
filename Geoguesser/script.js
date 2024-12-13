@@ -2,15 +2,20 @@ const mapLayer = "http://services.arcgisonline.com/arcgis/rest/services/World_Im
 const cover = document.querySelector(".cover");
 const confirm = document.querySelector(".confirm");
 
-// Initialize the map and set the view to the center of Europe
+let image = new Image;
+image.src = "/images/location-sign-svgrepo-com.svg";
+
+let image2 = new Image;
+image2.src = "/images/my-location-svgrepo-com.svg";
+
 var map = L.map('map', {
-    center: [52.52, 13.405], // Central coordinates for Europe (Berlin)
+    center: [52.52, 13.405], 
     zoom: 4,
-    maxBounds: [], // Restrict panning to Europe (approximate bounds)
-    maxBoundsViscosity: 0, // Adds a "rubber band" effect when hitting the bounds
+    maxBounds: [],
+    maxBoundsViscosity: 0, 
 });
 
-// Add a tile layer to the map with OpenStreetMap tiles
+
 L.tileLayer(mapLayer, {
     attribution: '&copy; <a href="https://carto.com/">Carto</a>',
     maxZoom: 7,
@@ -21,30 +26,59 @@ L.tileLayer(mapLayer, {
 // Nordkap location
 const nordkap = [71.15939141681443, 25.488281250000004];
 let currentLine = null;
+let currentImg = null;
 
 const maxpoints = 5000;
 const minpoints = 0;
 let lat, lng;
 
+let customIcon = L.icon({
+    iconUrl: image.src, 
+    iconSize: [38, 95], 
+    iconAnchor: [38/2, 95/1.5], 
+    popupAnchor: [-3, -76] 
+});
+
+let customIcon2 = L.icon({
+    iconUrl: image2.src, // URL of the custom icon
+    iconSize: [38, 38], // Icon size [width, height]
+    iconAnchor: [38/2, 38/2], // Point of the icon which will correspond to marker's location
+    popupAnchor: [-3, -76] // Point from which the popup should open relative to the iconAnchor
+});
+
 map.on('click', function(e) {
     lat = e.latlng.lat;
     lng = e.latlng.lng;
     confirm.classList.remove("hide");
+
+    if (currentImg) {
+        map.removeLayer(currentImg);
+    }
+
+    currentImg = L.marker([lat,lng], { icon: customIcon2 }).addTo(map);
+    
 });
+
+
 
 function resort(){
     if (currentLine) {
         map.removeLayer(currentLine);
     }
 
-    
+    L.marker([nordkap[0],nordkap[1]], { icon: customIcon }).addTo(map);
     currentLine = L.polyline([[lat, lng], nordkap], { color: 'red', weight: 2 }).addTo(map);
     const elementmap = map.getContainer();
-    elementmap.style.height = "50vh";
     map.invalidateSize();
-    map.setView([nordkap[0],nordkap[1]],6);
+    map.flyTo([nordkap[0],nordkap[1]],6);
     
-    
+    function applyScore(score, distance){
+        const scorelabel = document.querySelector(".score");
+        const distancelabel = document.querySelector(".distance");
+
+        scorelabel.textContent = `Score: ${score}`;
+        distancelabel.textContent = `${distance} km`;
+    }
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // Earth's radius in kilometers
@@ -77,6 +111,8 @@ function resort(){
         }
         
     }
+
+    applyScore(result, distance)
 
     if(result <= 0) result = 0;
     console.log(result);

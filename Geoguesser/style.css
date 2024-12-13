@@ -10,9 +10,9 @@
 :root{
     --bgcolor: rgb(35, 35, 43);
     --textcolor: rgb(219, 0, 201);
-    --clearbgcolor: rgb(9, 58, 4);
+    --clearbgcolor: rgb(56, 54, 54);
     --buttoncolor: rgb(255, 0, 0);
-    --scoretext:rgb(0, 17, 255);
+    --scoretext:rgb(0, 0, 0);
 }
 
 body{
@@ -42,22 +42,21 @@ body{
 }
 
 .cover{
-    height: 50%;
+    height: 20%;
     width: 100%;
     position: absolute;
     background-color: var(--clearbgcolor);
-    bottom: 0;
+    bottom: 16px;
     display: flex;
     flex-direction: column;
     flex: 1 1 0;
     justify-content: center;
     align-items: center;
     gap: 2em;
-}
-
-.score{
-    color: var(--scoretext);
-    text-align: center;
+    width: 90%;
+    color: white;
+    border-radius: 40px;
+    pointer-events: none;
 }
 
 .next{
@@ -68,6 +67,7 @@ body{
     border-radius: 6px;
     background-color: var(--next);
     cursor: pointer;
+    pointer-events: all;
 }
 
 .next:hover{
