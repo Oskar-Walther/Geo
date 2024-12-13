@@ -1,15 +1,19 @@
+const mapLayer = "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+const cover = document.querySelector(".cover");
+const confirm = document.querySelector(".confirm");
+
 // Initialize the map and set the view to the center of Europe
 var map = L.map('map', {
     center: [52.52, 13.405], // Central coordinates for Europe (Berlin)
     zoom: 4,
-    maxBounds: [[66.30221, -23.46680], [36.80928, 45.35156]], // Restrict panning to Europe (approximate bounds)
+    maxBounds: [], // Restrict panning to Europe (approximate bounds)
     maxBoundsViscosity: 0, // Adds a "rubber band" effect when hitting the bounds
 });
 
 // Add a tile layer to the map with OpenStreetMap tiles
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+L.tileLayer(mapLayer, {
     attribution: '&copy; <a href="https://carto.com/">Carto</a>',
-    maxZoom: 6,
+    maxZoom: 7,
     minZoom: 4,
     subdomains: 'abcd'
 }).addTo(map);
@@ -20,23 +24,28 @@ let currentLine = null;
 
 const maxpoints = 5000;
 const minpoints = 0;
+let lat, lng;
 
 map.on('click', function(e) {
-    var lat = e.latlng.lat;
-    var lng = e.latlng.lng;
+    lat = e.latlng.lat;
+    lng = e.latlng.lng;
+    confirm.classList.remove("hide");
+});
 
+function resort(){
     if (currentLine) {
         map.removeLayer(currentLine);
     }
 
-    // Draw a new line between the clicked point and Nordkap
+    
     currentLine = L.polyline([[lat, lng], nordkap], { color: 'red', weight: 2 }).addTo(map);
+    const elementmap = map.getContainer();
+    elementmap.style.height = "50vh";
+    map.invalidateSize();
+    map.setView([nordkap[0],nordkap[1]],6);
+    
+    
 
-    const confirm = document.querySelector(".confirm");
-    confirm.classList.remove("hide");
-});
-
-function resort(lat, lng){
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const R = 6371; // Earth's radius in kilometers
         const toRadians = (degree) => degree * (Math.PI / 180);
@@ -74,7 +83,7 @@ function resort(lat, lng){
     map.off('click');
 
     setTimeout(() => {
-        const cover = document.querySelector(".cover");
         cover.classList.remove("hide");
-    }, 1000);
+        confirm.classList.add("hide");
+    }, 0);
 }

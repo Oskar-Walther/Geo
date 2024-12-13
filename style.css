@@ -66,7 +66,7 @@ main {
   flex: 1 1 0;
   position: relative;
   background-color:var(--mainbackground);
-  background-image: url("background2.jpg") !important;
+  background-image: url("images/background2.jpg") !important;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -124,6 +124,7 @@ main img{
   height: 100%;
   text-shadow: 2px 2px 0 black;
   text-align: center;
+  transform-origin: center
 }
 
 .mybutton > a{
@@ -209,5 +210,21 @@ footer {
 
   to{
     opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+
+  .mybutton{
+    grid-template-columns: 1fr; 
+    width: 90px;
+    height: fit-content;
+    svg{
+      left: 0;
+    }
+  }
+
+  .mybutton > span{
+    display: none;
   }
 }

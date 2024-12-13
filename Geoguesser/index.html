@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geoguesser</title>
-    <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="/node_modules/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
     <div id="map"></div>
-    <canvas class="cover hide"></canvas>
+    <div class="cover hide">
+        <span class="score">Score: </span>
+        <button class="next">Next Guess</button>
+    </div>
     
-    <button class="confirm hide">Bestätigen</button>
+    <button class="confirm hide" onclick="resort()">Bestätigen</button>
     
 </body>
-    <script src="./node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="/node_modules/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </html>
