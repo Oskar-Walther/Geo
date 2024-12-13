@@ -119,45 +119,52 @@ function resort() {
 
   var polygon = L.polygon(polygonCoords);
 
-  function calculateDistanceToPolygon(lat, lng) {
-    const R = 6371; // Earth's radius in km
-    const toRadians = (deg) => (deg * Math.PI) / 180;
+  function isPointInPolygon(lat, lng, coords) {
+    let inside = false;
+    for (let i = 0, j = coords.length - 1; i < coords.length; j = i++) {
+        const xi = coords[i].lat, yi = coords[i].lng;
+        const xj = coords[j].lat, yj = coords[j].lng;
+        const intersect = ((yi > lng) !== (yj > lng)) &&
+                          (lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+}
 
-    const haversine = (lat1, lng1, lat2, lng2) => {
+function calculateDistanceToPolygon(lat, lng) {
+  const R = 6371; // Earth's radius in km
+  const toRadians = (deg) => deg * Math.PI / 180;
+
+  const haversine = (lat1, lng1, lat2, lng2) => {
       const dLat = toRadians(lat2 - lat1);
       const dLon = toRadians(lng2 - lng1);
-      const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRadians(lat1)) *
-          Math.cos(toRadians(lat2)) *
-          Math.sin(dLon / 2) ** 2;
+      const a = Math.sin(dLat / 2) ** 2 +
+                Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
       return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    };
+  };
 
-    const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
-      const t = Math.max(
-        0,
-        Math.min(
-          1,
-          ((lat - lat1) * (lat2 - lat1) + (lng - lng1) * (lng2 - lng1)) /
-            ((lat2 - lat1) ** 2 + (lng2 - lng1) ** 2)
-        )
-      );
+  const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
+      const t = Math.max(0, Math.min(1, ((lat - lat1) * (lat2 - lat1) + (lng - lng1) * (lng2 - lng1)) /
+          ((lat2 - lat1) ** 2 + (lng2 - lng1) ** 2)));
       const projLat = lat1 + t * (lat2 - lat1);
       const projLng = lng1 + t * (lng2 - lng1);
       return haversine(lat, lng, projLat, projLng);
-    };
+  };
 
-    const coords = polygon.getLatLngs()[0];
-    return Math.round(
-      Math.min(
-        ...coords.map((p, i) => {
+  const coords = polygon.getLatLngs()[0];
+
+  // Check if point is inside the polygon
+  if (isPointInPolygon(lat, lng, coords)) {
+      return 0; // Distance is 0 if inside the polygon
+  }
+
+  return Math.round(
+      Math.min(...coords.map((p, i) => {
           const next = coords[(i + 1) % coords.length];
           return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
-        })
-      )
-    );
-  }
+      }))
+  );
+}
 
   const distance = calculateDistanceToPolygon(lat, lng);
   console.log("Distance to nearest border: " + distance + " meters");
