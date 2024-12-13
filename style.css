@@ -19,8 +19,6 @@
   --headcolor:rgb(231, 40, 40);
   --maintextcolor: rgb(255, 0, 0);
   --centercolor: rgb(253, 4, 4);
-  --fullscreencolor: rgb(105, 105, 104);
-  --fullscreencolorhover: rgb(176, 177, 176);
 }
 
 body {
@@ -181,26 +179,6 @@ footer {
 
 .small{
   font-size: 1.4em !important;
-}
-
-.fullscreen{
-  height: 24px;
-  background-color: transparent;
-  border: none;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-  padding: 6px;
-  fill: var(--fullscreencolor);
-}
-
-.fullscreen:hover{
-  fill: var(--fullscreencolorhover);
 }
 
 @keyframes fadein {
