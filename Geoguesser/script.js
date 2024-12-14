@@ -2,6 +2,7 @@ const mapLayer =
   "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const cover = document.querySelector(".cover");
 const confirm = document.querySelector(".confirm");
+const tasklabel = document.querySelector(".task");
 
 let image = new Image();
 image.src = "/images/location-sign-svgrepo-com.svg";
@@ -13,10 +14,10 @@ var map = L.map("map", {
   center: [52.52, 13.405],
   zoom: 4,
   maxBounds: [
-    [75, -22],
+    [75, -25],
     [30, 65],
   ],
-  maxBoundsViscosity: 0,
+  maxBoundsViscosity: 1,
 });
 
 L.tileLayer(mapLayer, {
@@ -26,39 +27,31 @@ L.tileLayer(mapLayer, {
   subdomains: "abcd",
 }).addTo(map);
 
-var polygonCoords = [
-  [56.26776108757582, 13.9306640625],
-  [57.58655886615978, 12.612304687500002],
-  [58.950008233357046, 11.77734375],
-  [59.489726035537075, 10.590820312500002],
-  [58.676937672586924, 9.008789062500002],
-  [58.147518599073585, 7.514648437500001],
-  [58.92733441827545, 6.1962890625],
-  [60.52215754533236, 5.405273437500001],
-  [61.62728646147466, 5.800781250000001],
-  [62.91523303947614, 7.294921875000001],
-  [63.58767529470318, 9.272460937500002],
-  [64.66151739623564, 11.425781250000002],
-  [66.24916310923315, 13.227539062500002],
-  [66.79190947341796, 14.370117187500002],
-  [69.00567519658819, 17.973632812500004],
-  [70.3926061360023, 20.170898437500004],
-  [70.83024762385253, 24.609375000000004],
-  [70.97402838932706, 27.905273437500004],
-  [69.17818443567216, 27.465820312500004],
-  [66.58321725728176, 24.829101562500004],
-  [65.91062334197893, 23.291015625000004],
-  [65.25670649344259, 21.4453125],
-  [64.28275952823397, 21.181640625000004],
-  [63.66576033778838, 19.643554687500004],
-  [62.87518837993309, 17.973632812500004],
-  [61.689872200460016, 17.050781250000004],
-  [59.84481485969108, 17.578125000000004],
-  [59.06315402462662, 18.457031250000004],
-  [56.897003921272606, 16.171875000000004],
-  [56.26776108757582, 14.809570312500002],
-];
-let center = [62.90394634820554, 15.6328125];
+let polygonCoords;
+let center;
+
+getCoords("/data/data.json");
+
+async function getCoords(file) {
+  let x = await fetch(file);
+  let y = await x.json();
+  let locations = y.locations;
+
+  let objects = Object.values(locations);
+  let names = Object.keys(locations);
+
+  let len = objects.length;
+
+  let random = Math.floor(Math.random() * len);
+  geoobject = objects[random];
+  geoname = names[random];
+  
+  center = geoobject.center;
+  polygonCoords = (geoobject.polygion);
+
+  tasklabel.textContent = geoname;
+  
+}
 
 let currentLine = null;
 let currentImg = null;
@@ -103,7 +96,7 @@ function resort() {
   L.marker([center[0], center[1]], { icon: customIcon }).addTo(map);
   currentLine = L.polyline([[lat, lng], center], {
     color: "red",
-    weight: 2,
+    weight: 3,
   }).addTo(map);
 
   map.invalidateSize();
@@ -122,49 +115,63 @@ function resort() {
   function isPointInPolygon(lat, lng, coords) {
     let inside = false;
     for (let i = 0, j = coords.length - 1; i < coords.length; j = i++) {
-        const xi = coords[i].lat, yi = coords[i].lng;
-        const xj = coords[j].lat, yj = coords[j].lng;
-        const intersect = ((yi > lng) !== (yj > lng)) &&
-                          (lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
+      const xi = coords[i].lat,
+        yi = coords[i].lng;
+      const xj = coords[j].lat,
+        yj = coords[j].lng;
+      const intersect =
+        yi > lng !== yj > lng &&
+        lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi;
+      if (intersect) inside = !inside;
     }
     return inside;
-}
+  }
 
-function calculateDistanceToPolygon(lat, lng) {
-  const R = 6371; // Earth's radius in km
-  const toRadians = (deg) => deg * Math.PI / 180;
+  function calculateDistanceToPolygon(lat, lng) {
+    const R = 6371; // Earth's radius in km
+    const toRadians = (deg) => (deg * Math.PI) / 180;
 
-  const haversine = (lat1, lng1, lat2, lng2) => {
+    const haversine = (lat1, lng1, lat2, lng2) => {
       const dLat = toRadians(lat2 - lat1);
       const dLon = toRadians(lng2 - lng1);
-      const a = Math.sin(dLat / 2) ** 2 +
-                Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRadians(lat1)) *
+          Math.cos(toRadians(lat2)) *
+          Math.sin(dLon / 2) ** 2;
       return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  };
+    };
 
-  const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
-      const t = Math.max(0, Math.min(1, ((lat - lat1) * (lat2 - lat1) + (lng - lng1) * (lng2 - lng1)) /
-          ((lat2 - lat1) ** 2 + (lng2 - lng1) ** 2)));
+    const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
+      const t = Math.max(
+        0,
+        Math.min(
+          1,
+          ((lat - lat1) * (lat2 - lat1) + (lng - lng1) * (lng2 - lng1)) /
+            ((lat2 - lat1) ** 2 + (lng2 - lng1) ** 2)
+        )
+      );
       const projLat = lat1 + t * (lat2 - lat1);
       const projLng = lng1 + t * (lng2 - lng1);
       return haversine(lat, lng, projLat, projLng);
-  };
+    };
 
-  const coords = polygon.getLatLngs()[0];
+    const coords = polygon.getLatLngs()[0];
 
-  // Check if point is inside the polygon
-  if (isPointInPolygon(lat, lng, coords)) {
+    // Check if point is inside the polygon
+    if (isPointInPolygon(lat, lng, coords)) {
       return 0; // Distance is 0 if inside the polygon
-  }
+    }
 
-  return Math.round(
-      Math.min(...coords.map((p, i) => {
+    return Math.round(
+      Math.min(
+        ...coords.map((p, i) => {
           const next = coords[(i + 1) % coords.length];
           return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
-      }))
-  );
-}
+        })
+      )
+    );
+  }
 
   const distance = calculateDistanceToPolygon(lat, lng);
   console.log("Distance to nearest border: " + distance + " meters");
@@ -241,20 +248,18 @@ map.addControl(drawControl);
 map.on("draw:created", function (e) {
   var type = e.layerType; // Type of shape ('polygon', 'rectangle', 'circle')
   var layer = e.layer; // The drawn shape layer
-
+  var center;
   // Add the drawn shape to the map
   map.addLayer(layer);
   let test = [];
   // Log the area parameters
   if (type === "polygon" || type === "rectangle") {
-    // Log coordinates of the vertices
-    var latLngs = layer.getLatLngs()[0]; // Outer ring of the polygon
-    console.log("Polygon/Rectangle coordinates:");
+    
+    var latLngs = layer.getLatLngs()[0];
     latLngs.forEach((latlng) => {
       let temp = [latlng.lat, latlng.lng];
       test.push(temp);
     });
-    var geojson = layer.toGeoJSON(); // Convert the drawn layer to GeoJSON // Calculate the centroid
     var sumLat = 0,
       sumLng = 0;
     var numPoints = latLngs.length;
@@ -267,8 +272,8 @@ map.on("draw:created", function (e) {
     var centroidLat = sumLat / numPoints;
     var centroidLng = sumLng / numPoints;
 
-    let center = [centroidLat, centroidLng];
-    console.log(center);
+    center = [centroidLat, centroidLng];
+    
   } else if (type === "circle") {
     // Log circle parameters
     var center = layer.getLatLng(); // Center of the circle
@@ -278,5 +283,7 @@ map.on("draw:created", function (e) {
     console.log(`Radius: ${radius} meters`);
   }
 
-  console.log(test);
+  let z = {center, polygion: test}
+
+  console.log(JSON.stringify(z));
 });
