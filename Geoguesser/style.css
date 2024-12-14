@@ -152,3 +152,8 @@ body {
   pointer-events: none;
   display: none;
 }
+
+
+.generaltext{
+  font-size: 1.3em;
+}

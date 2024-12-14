@@ -106,7 +106,7 @@ function resort() {
     const scorelabel = document.querySelector(".score");
     const distancelabel = document.querySelector(".distance");
 
-    scorelabel.textContent = `Score: ${score}`;
+    scorelabel.textContent = `${score}`;
     distancelabel.textContent = `${distance} km`;
   }
 
@@ -184,7 +184,7 @@ function resort() {
     if (maxpoints - distance >= maxpoints - radius) {
       return maxpoints;
     } else {
-      return Math.round(maxpoints - (distance - radius) / factor);
+      return Math.max(0,Math.round(maxpoints - (distance - radius) / factor));
     }
   }
 
@@ -197,6 +197,7 @@ function resort() {
   setTimeout(() => {
     cover.classList.remove("hide");
     confirm.classList.add("hide");
+    tasklabel.parentElement.classList.add("hide");
   }, 0);
 }
 
