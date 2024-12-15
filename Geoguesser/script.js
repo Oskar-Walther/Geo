@@ -174,9 +174,8 @@ function resort() {
   }
 
   const distance = calculateDistanceToPolygon(lat, lng);
-  console.log("Distance to nearest border: " + distance + " meters");
 
-  console.log(`Distance: ${distance} km`);
+  //console.log(`Distance: ${distance} km`);
 
   result = Calcresult(distance, 100, 0.8);
 
@@ -191,7 +190,7 @@ function resort() {
   applyScore(result, distance);
 
   if (result <= 0) result = 0;
-  console.log(result);
+  //console.log(result);
   map.off("click");
 
   setTimeout(() => {
