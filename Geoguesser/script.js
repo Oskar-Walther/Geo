@@ -5,10 +5,10 @@ const confirm = document.querySelector(".confirm");
 const tasklabel = document.querySelector(".task");
 
 let image = new Image();
-image.src = "/images/location-sign-svgrepo-com.svg";
+image.src = "./images/location-sign-svgrepo-com.svg";
 
 let image2 = new Image();
-image2.src = "/images/my-location-svgrepo-com.svg";
+image2.src = "./images/my-location-svgrepo-com.svg";
 
 var map = L.map("map", {
   center: [52.52, 13.405],
@@ -30,7 +30,7 @@ L.tileLayer(mapLayer, {
 let polygonCoords;
 let center;
 
-getCoords("/data/data.json");
+getCoords("./data/data.json");
 
 async function getCoords(file) {
   let x = await fetch(file);
