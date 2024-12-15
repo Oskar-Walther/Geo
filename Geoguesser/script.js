@@ -43,8 +43,8 @@ async function getCoords(file) {
   let len = objects.length;
 
   let random = Math.floor(Math.random() * len);
-  geoobject = objects[random];
-  geoname = names[random];
+  let geoobject = objects[random];
+  let geoname = names[random];
   
   center = geoobject.center;
   polygonCoords = (geoobject.polygion);
