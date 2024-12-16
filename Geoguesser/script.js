@@ -196,9 +196,65 @@ function resort() {
   }
 
   function calculateDistanceToLine(lat, lng) {
-    
+    // Convert lat/lng to radians
+    const toRadians = (degree) => (degree * Math.PI) / 180;
+
+    // Haversine distance function (in kilometers)
+    const haversine = (lat1, lon1, lat2, lon2) => {
+      const R = 6371; // Earth radius in km
+      const dLat = toRadians(lat2 - lat1);
+      const dLon = toRadians(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) *
+          Math.cos(toRadians(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c; // Distance in kilometers
+    };
+
+    // Helper function to calculate the distance from a point to a line segment
+    const pointToLineDistance = (px, py, ax, ay, bx, by) => {
+      const lineLength = haversine(ax, ay, bx, by);
+      const u =
+        ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) /
+        (lineLength * lineLength);
+
+      let closestX, closestY;
+
+      if (u < 0) {
+        // Closest to point A
+        closestX = ax;
+        closestY = ay;
+      } else if (u > 1) {
+        // Closest to point B
+        closestX = bx;
+        closestY = by;
+      } else {
+        // Closest to the projection of P on line AB
+        closestX = ax + u * (bx - ax);
+        closestY = ay + u * (by - ay);
+      }
+
+      return haversine(px, py, closestX, closestY);
+    };
+
+    // Iterate over each line segment in the polygon
+    let minDistance = Infinity;
+    for (let i = 0; i < polygonCoords.length; i++) {
+      const [lat1, lng1] = polygonCoords[i];
+      const [lat2, lng2] = polygonCoords[(i + 1) % polygonCoords.length]; // Wrap around to the first point
+
+      // Calculate the distance from the user point to this line segment
+      const dist = pointToLineDistance(lng, lat, lng1, lat1, lng2, lat2);
+
+      // Update the minimum distance
+      minDistance = Math.min(minDistance, dist);
+    }
+
+    return Math.floor(minDistance);
   }
-  
 
   function calculateDistanceToPoint(lat1, lon1) {
     const toRadians = (degree) => (degree * Math.PI) / 180; // Helper function to convert degrees to radians
@@ -207,15 +263,18 @@ function resort() {
     const dLat = toRadians(center[0] - lat1);
     const dLon = toRadians(center[1] - lon1);
 
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(toRadians(lat1)) * Math.cos(toRadians(center[0])) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat1)) *
+        Math.cos(toRadians(center[0])) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c; // Distance in kilometers
     return Math.floor(distance);
-}
+  }
 
   // Example usage with switch
 
@@ -233,11 +292,7 @@ function resort() {
     case typeofshape === "polygion":
       distance = calculateDistanceToPolygon(lat, lng);
       break;
-
-  
   }
-
-  
 
   //console.log(`Distance: ${distance} km`);
 
