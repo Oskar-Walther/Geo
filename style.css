@@ -12,11 +12,11 @@
   --textcolor: rgb(252, 12, 12);
   --buttoncolor: rgba(100, 6, 45, 0);
   --buttonhover: rgb(107, 7, 7);
-  --mainbackground:rgb(10, 10, 10) ;
+  --mainbackground: rgb(10, 10, 10);
   --fotterbg: #000000;
-  --footer:rgb(35, 35, 43);
-  --closebg:rgb(35, 35, 43);
-  --headcolor:rgb(231, 40, 40);
+  --footer: rgb(35, 35, 43);
+  --closebg: rgb(35, 35, 43);
+  --headcolor: rgb(231, 40, 40);
   --maintextcolor: rgb(255, 0, 0);
   --centercolor: rgb(253, 4, 4);
 }
@@ -37,7 +37,7 @@ header {
   gap: 1.5em;
 }
 
-header > img{
+header > img {
   filter: drop-shadow(2px 2px 0 black);
   width: calc(105px / 1.2);
   position: relative;
@@ -61,7 +61,7 @@ main {
   flex-direction: column;
   flex: 1 1 0;
   position: relative;
-  background-color:var(--mainbackground);
+  background-color: var(--mainbackground);
   background-image: url("images/background2.jpg") !important;
   background-position: center;
   background-size: cover;
@@ -70,10 +70,10 @@ main {
   width: 100%;
 }
 
-main img{
+main img {
   position: absolute;
   z-index: 1;
-  scale: .6;
+  scale: 0.6;
   width: fit-content;
   height: fit-content;
 }
@@ -94,7 +94,7 @@ main img{
   place-items: center;
   z-index: 2;
 
-  svg{
+  svg {
     fill: var(--centercolor);
     height: 50px;
     display: block;
@@ -120,10 +120,10 @@ main img{
   height: 100%;
   text-shadow: 2px 2px 0 black;
   text-align: center;
-  transform-origin: center
+  transform-origin: center;
 }
 
-.mybutton > a{
+.mybutton > a {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -139,9 +139,12 @@ footer {
   grid-template-columns: 1fr auto;
   align-items: center;
   background-color: var(--footer);
-  padding: 0  30px; /* Ändert abstand vom Rand */
+  padding: 0 30px; /* Ändert abstand vom Rand */
   transition: 10s all ease;
   padding: 2em;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateY(0); /* Initial position */
+  opacity: 1;
 }
 
 .text {
@@ -158,22 +161,22 @@ footer {
   text-shadow: 2px 2px 0 black;
 }
 
-.close{
-    position: absolute;
-    bottom: 0;
-    left: 16px;
-    background-color: var(--closebg);
-    border: none;
-    border-radius: 6px 6px 0 0;
-    width: calc(100% - 98%);
-    font-size: 1em;
-    cursor: pointer;
-    padding: 6px;
-    display: flex;
-    flex: 1 1 0;
+.close {
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  background-color: var(--closebg);
+  border: none;
+  border-radius: 6px 6px 0 0;
+  width: calc(100% - 98%);
+  font-size: 1em;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  flex: 1 1 0;
 }
 
-.close svg{
+.close svg {
   display: flex;
   flex: 1 1 0;
   height: 24px;
@@ -181,40 +184,39 @@ footer {
   fill: #00ff00 !important;
 }
 
-.close svg g{
+.close svg g {
   fill: #00ff00 !important;
 }
 
-.hide{
+.hide {
   display: none;
 }
 
-.small{
+.small {
   font-size: 1.4em !important;
 }
 
 @keyframes fadein {
-  from{
+  from {
     opacity: 0;
   }
 
-  to{
+  to {
     opacity: 1;
   }
 }
 
 @media only screen and (max-width: 1400px) {
-
-  .mybutton{
-    grid-template-columns: 1fr; 
+  .mybutton {
+    grid-template-columns: 1fr;
     width: 90px;
     height: fit-content;
-    svg{
+    svg {
       left: 0;
     }
   }
 
-  .mybutton > span{
+  .mybutton > span {
     display: none;
   }
 }

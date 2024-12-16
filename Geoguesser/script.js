@@ -22,13 +22,14 @@ var map = L.map("map", {
 
 L.tileLayer(mapLayer, {
   attribution: '&copy; <a href="https://carto.com/">Carto</a>',
-  maxZoom: 7,
+  maxZoom: 10,
   minZoom: 4,
   subdomains: "abcd",
 }).addTo(map);
 
 let polygonCoords;
 let center;
+let typeofshape;
 
 getCoords("../data/data.json");
 
@@ -46,10 +47,12 @@ async function getCoords(file) {
   let geoobject = objects[random];
   let geoname = names[random];
 
+  typeofshape = geoobject.type;
+
   center = geoobject.center;
   polygonCoords = geoobject.polygion;
 
-  tasklabel.textContent = geoname.replace("-"," ");
+  tasklabel.textContent = geoname.replace("-", " ");
 }
 
 let currentLine = null;
@@ -109,7 +112,27 @@ function resort() {
     distancelabel.textContent = `${distance} km`;
   }
 
-  var polygon = L.polygon(polygonCoords).addTo(map);
+  let polygon;
+
+  switch (true) {
+    case typeofshape == "line":
+      polygon = L.polyline(polygonCoords);
+      break;
+
+    case typeofshape == "marker":
+      polygon = L.marker(polygonCoords);
+      break;
+
+    case typeofshape == "polygion":
+      polygon = L.polygon(polygonCoords);
+      break;
+
+    default:
+      alert("error");
+      console.log(typeofshape);
+  }
+
+  polygon.addTo(map);
 
   function isPointInPolygon(lat, lng, coords) {
     let inside = false;
@@ -172,7 +195,87 @@ function resort() {
     );
   }
 
-  const distance = calculateDistanceToPolygon(lat, lng);
+  function calculateDistanceToLine(lat, lng) {
+    const R = 6371; // Earth's radius in km
+    const toRadians = (deg) => (deg * Math.PI) / 180;
+
+    const haversine = (lat1, lng1, lat2, lng2) => {
+      const dLat = toRadians(lat2 - lat1);
+      const dLon = toRadians(lng2 - lng1);
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRadians(lat1)) *
+          Math.cos(toRadians(lat2)) *
+          Math.sin(dLon / 2) ** 2;
+      return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    };
+
+    const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
+      const t = Math.max(
+        0,
+        Math.min(
+          1,
+          ((lat - lat1) * (lat2 - lat1) + (lng - lng1) * (lng2 - lng1)) /
+            ((lat2 - lat1) ** 2 + (lng2 - lng1) ** 2)
+        )
+      );
+      const projLat = lat1 + t * (lat2 - lat1);
+      const projLng = lng1 + t * (lng2 - lng1);
+      return haversine(lat, lng, projLat, projLng);
+    };
+
+    const coords = line.getLatLngs()[0]; // Assuming `line` is an L.polyline object
+
+    return Math.round(
+      Math.min(
+        ...coords.map((p, i) => {
+          if (i === coords.length - 1) return Infinity; // Skip last point if not part of a segment
+          const next = coords[i + 1];
+          return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
+        })
+      ) * 1000 // Convert to meters
+    );
+  }
+
+  function calculateDistanceToPoint(lat, lng) {
+    const R = 6371; // Earth's radius in km
+    const toRadians = (deg) => (deg * Math.PI) / 180;
+
+    const haversine = (lat1, lng1, lat2, lng2) => {
+      const dLat = toRadians(lat2 - lat1);
+      const dLon = toRadians(lng2 - lng1);
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRadians(lat1)) *
+          Math.cos(toRadians(lat2)) *
+          Math.sin(dLon / 2) ** 2;
+      return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    };
+
+    const pointCoords = marker.getLatLng(); // Assuming `marker` is an L.marker object
+    return Math.round(
+      haversine(lat, lng, pointCoords.lat, pointCoords.lng) * 1000 // Convert to meters
+    );
+  }
+
+  // Example usage with switch
+  switch (true) {
+    case typeofshape === "line":
+      distance = calculateDistanceToLine(lat, lng);
+      break;
+
+    case typeofshape === "marker":
+      distance = calculateDistanceToPoint(lat, lng);
+      break;
+
+    case typeofshape === "polygion":
+      distance = calculateDistanceToPolygon(lat, lng);
+      break;
+
+  
+  }
+
+  let distance = calculateDistanceToPolygon(lat, lng);
 
   //console.log(`Distance: ${distance} km`);
 
@@ -233,10 +336,10 @@ function toggleFullscreen() {
 var drawControl = new L.Control.Draw({
   draw: {
     polyline: true, // Disable polyline
-    circlemarker: true, // Disable circlemarker
+    circlemarker: false, // Disable circlemarker
     marker: true, // Disable marker
-    circle: true, // Enable circle
-    rectangle: true, // Enable rectangle
+    circle: false, // Enable circle
+    rectangle: false, // Enable rectangle
     polygon: true,
     // Enable polygon
   },
@@ -248,6 +351,7 @@ map.on("draw:created", function (e) {
   var type = e.layerType; // Type of shape ('polygon', 'rectangle', 'circle')
   var layer = e.layer; // The drawn shape layer
   var center;
+  let htype;
   // Add the drawn shape to the map
   map.addLayer(layer);
   let test = [];
@@ -261,6 +365,7 @@ map.on("draw:created", function (e) {
     var sumLat = 0,
       sumLng = 0;
     var numPoints = latLngs.length;
+    htype = "polygion";
 
     latLngs.forEach(function (latlng) {
       sumLat += latlng.lat;
@@ -273,7 +378,12 @@ map.on("draw:created", function (e) {
     center = [centroidLat, centroidLng];
   } else if (type === "polyline") {
     let polygion = layer.getLatLngs();
-    test = polygion;
+    polygion.forEach((latlng) => {
+      let temp = [latlng.lat, latlng.lng];
+      test.push(temp);
+    });
+
+    htype = "line";
 
     if (polygion.length % 2 === 0) {
       // Even number of points
@@ -290,16 +400,16 @@ map.on("draw:created", function (e) {
 
       center = [polygion[midIndex].lat, polygion[midIndex].lng];
     }
-  } else if(type === "marker"){
+  } else if (type === "marker") {
     let point = layer.getLatLng();
     center = [point.lat, point.lng];
-    test = point;
+    test = [point.lat, point.lng];
+    htype = "marker";
   }
 
   console.log(type);
-  
 
-  let z = { center, polygion: test };
+  let z = { center, polygion: test, type: htype };
   let y = JSON.stringify(z);
   console.log(y);
   navigator.clipboard.writeText(y);
