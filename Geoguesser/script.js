@@ -49,7 +49,7 @@ async function getCoords(file) {
   center = geoobject.center;
   polygonCoords = geoobject.polygion;
 
-  tasklabel.textContent = geoname;
+  tasklabel.textContent = geoname.replace("-"," ");
 }
 
 let currentLine = null;
@@ -109,7 +109,7 @@ function resort() {
     distancelabel.textContent = `${distance} km`;
   }
 
-  var polygon = L.polygon(polygonCoords);
+  var polygon = L.polygon(polygonCoords).addTo(map);
 
   function isPointInPolygon(lat, lng, coords) {
     let inside = false;
@@ -176,7 +176,7 @@ function resort() {
 
   //console.log(`Distance: ${distance} km`);
 
-  result = Calcresult(distance, 100, 0.8);
+  result = Calcresult(distance, 100, 0.5);
 
   function Calcresult(distance, radius, factor) {
     if (maxpoints - distance >= maxpoints - radius) {
@@ -290,9 +290,17 @@ map.on("draw:created", function (e) {
 
       center = [polygion[midIndex].lat, polygion[midIndex].lng];
     }
+  } else if(type === "marker"){
+    let point = layer.getLatLng();
+    center = [point.lat, point.lng];
+    test = point;
   }
 
-  let z = { center, polygion: test };
+  console.log(type);
+  
 
-  console.log(JSON.stringify(z));
+  let z = { center, polygion: test };
+  let y = JSON.stringify(z);
+  console.log(y);
+  navigator.clipboard.writeText(y);
 });
