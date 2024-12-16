@@ -45,12 +45,11 @@ async function getCoords(file) {
   let random = Math.floor(Math.random() * len);
   let geoobject = objects[random];
   let geoname = names[random];
-  
+
   center = geoobject.center;
-  polygonCoords = (geoobject.polygion);
+  polygonCoords = geoobject.polygion;
 
   tasklabel.textContent = geoname;
-  
 }
 
 let currentLine = null;
@@ -183,7 +182,7 @@ function resort() {
     if (maxpoints - distance >= maxpoints - radius) {
       return maxpoints;
     } else {
-      return Math.max(0,Math.round(maxpoints - (distance - radius) / factor));
+      return Math.max(0, Math.round(maxpoints - (distance - radius) / factor));
     }
   }
 
@@ -254,7 +253,6 @@ map.on("draw:created", function (e) {
   let test = [];
   // Log the area parameters
   if (type === "polygon" || type === "rectangle") {
-    
     var latLngs = layer.getLatLngs()[0];
     latLngs.forEach((latlng) => {
       let temp = [latlng.lat, latlng.lng];
@@ -273,17 +271,28 @@ map.on("draw:created", function (e) {
     var centroidLng = sumLng / numPoints;
 
     center = [centroidLat, centroidLng];
-    
-  } else if (type === "circle") {
-    // Log circle parameters
-    var center = layer.getLatLng(); // Center of the circle
-    var radius = layer.getRadius(); // Radius of the circle
-    console.log("Circle Parameters:");
-    console.log(`Center: Latitude ${center.lat}, Longitude ${center.lng}`);
-    console.log(`Radius: ${radius} meters`);
+  } else if (type === "polyline") {
+    let polygion = layer.getLatLngs();
+    test = polygion;
+
+    if (polygion.length % 2 === 0) {
+      // Even number of points
+      let midIndex1 = polygion.length / 2 - 1;
+      let midIndex2 = polygion.length / 2;
+
+      let temp1 = (polygion[midIndex1].lat + polygion[midIndex2].lat) / 2;
+      let temp2 = (polygion[midIndex1].lng + polygion[midIndex2].lng) / 2;
+
+      center = [temp1, temp2];
+    } else {
+      // Odd number of points
+      let midIndex = Math.floor(polygion.length / 2);
+
+      center = [polygion[midIndex].lat, polygion[midIndex].lng];
+    }
   }
 
-  let z = {center, polygion: test}
+  let z = { center, polygion: test };
 
   console.log(JSON.stringify(z));
 });
