@@ -22,7 +22,7 @@ var map = L.map("map", {
 
 L.tileLayer(mapLayer, {
   attribution: '&copy; <a href="https://carto.com/">Carto</a>',
-  maxZoom: 10,
+  maxZoom: 17,
   minZoom: 4,
   subdomains: "abcd",
 }).addTo(map);
@@ -196,69 +196,31 @@ function resort() {
   }
 
   function calculateDistanceToLine(lat, lng) {
-    const R = 6371; // Earth's radius in km
-    const toRadians = (deg) => (deg * Math.PI) / 180;
-
-    const haversine = (lat1, lng1, lat2, lng2) => {
-      const dLat = toRadians(lat2 - lat1);
-      const dLon = toRadians(lng2 - lng1);
-      const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRadians(lat1)) *
-          Math.cos(toRadians(lat2)) *
-          Math.sin(dLon / 2) ** 2;
-      return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    };
-
-    const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
-      const t = Math.max(
-        0,
-        Math.min(
-          1,
-          ((lat - lat1) * (lat2 - lat1) + (lng - lng1) * (lng2 - lng1)) /
-            ((lat2 - lat1) ** 2 + (lng2 - lng1) ** 2)
-        )
-      );
-      const projLat = lat1 + t * (lat2 - lat1);
-      const projLng = lng1 + t * (lng2 - lng1);
-      return haversine(lat, lng, projLat, projLng);
-    };
-
-    const coords = line.getLatLngs()[0]; // Assuming `line` is an L.polyline object
-
-    return Math.round(
-      Math.min(
-        ...coords.map((p, i) => {
-          if (i === coords.length - 1) return Infinity; // Skip last point if not part of a segment
-          const next = coords[i + 1];
-          return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
-        })
-      ) * 1000 // Convert to meters
-    );
+    
   }
+  
 
-  function calculateDistanceToPoint(lat, lng) {
-    const R = 6371; // Earth's radius in km
-    const toRadians = (deg) => (deg * Math.PI) / 180;
+  function calculateDistanceToPoint(lat1, lon1) {
+    const toRadians = (degree) => (degree * Math.PI) / 180; // Helper function to convert degrees to radians
 
-    const haversine = (lat1, lng1, lat2, lng2) => {
-      const dLat = toRadians(lat2 - lat1);
-      const dLon = toRadians(lng2 - lng1);
-      const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRadians(lat1)) *
-          Math.cos(toRadians(lat2)) *
-          Math.sin(dLon / 2) ** 2;
-      return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    };
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = toRadians(center[0] - lat1);
+    const dLon = toRadians(center[1] - lon1);
 
-    const pointCoords = marker.getLatLng(); // Assuming `marker` is an L.marker object
-    return Math.round(
-      haversine(lat, lng, pointCoords.lat, pointCoords.lng) * 1000 // Convert to meters
-    );
-  }
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(toRadians(lat1)) * Math.cos(toRadians(center[0])) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c; // Distance in kilometers
+    return Math.floor(distance);
+}
 
   // Example usage with switch
+
+  let distance;
+
   switch (true) {
     case typeofshape === "line":
       distance = calculateDistanceToLine(lat, lng);
@@ -275,7 +237,7 @@ function resort() {
   
   }
 
-  let distance = calculateDistanceToPolygon(lat, lng);
+  
 
   //console.log(`Distance: ${distance} km`);
 
