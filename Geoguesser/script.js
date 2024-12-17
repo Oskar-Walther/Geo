@@ -3,6 +3,7 @@ const mapLayer =
 const cover = document.querySelector(".cover");
 const confirm = document.querySelector(".confirm");
 const tasklabel = document.querySelector(".task");
+const debug = true;
 
 let image = new Image();
 image.src = "../images/location-sign-svgrepo-com.svg";
@@ -14,24 +15,27 @@ var map = L.map("map", {
   center: [52.52, 13.405],
   zoom: 4,
   maxBounds: [
-    [75, -25],
-    [30, 65],
+    [34, -31],
+    [72, 45],
   ],
   maxBoundsViscosity: 1,
 });
 
 L.tileLayer(mapLayer, {
   attribution: '&copy; <a href="https://carto.com/">Carto</a>',
-  maxZoom: 17,
-  minZoom: 4,
+  minZoom: 3,
+  maxZoom: 10,
   subdomains: "abcd",
+  noWrap: true,
 }).addTo(map);
 
 let polygonCoords;
 let center;
 let typeofshape;
+let polygon;
 
 getCoords("../data/data.json");
+
 
 async function getCoords(file) {
   let x = await fetch(file);
@@ -102,7 +106,7 @@ function resort() {
   }).addTo(map);
 
   map.invalidateSize();
-  map.flyTo([center[0], center[1]], 6);
+  map.flyTo([center[0], center[1]], 7);
 
   function applyScore(score, distance) {
     const scorelabel = document.querySelector(".score");
@@ -112,7 +116,7 @@ function resort() {
     distancelabel.textContent = `${distance} km`;
   }
 
-  let polygon;
+
 
   switch (true) {
     case typeofshape == "line":
@@ -132,7 +136,9 @@ function resort() {
       console.log(typeofshape);
   }
 
-  polygon.addTo(map);
+  if(debug){
+    polygon.addTo(map);
+  }
 
   function isPointInPolygon(lat, lng, coords) {
     let inside = false;
@@ -349,85 +355,86 @@ function toggleFullscreen() {
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/></svg>';
   }
 }
+if (debug) {
+  var drawControl = new L.Control.Draw({
+    draw: {
+      polyline: true, // Disable polyline
+      circlemarker: false, // Disable circlemarker
+      marker: true, // Disable marker
+      circle: false, // Enable circle
+      rectangle: false, // Enable rectangle
+      polygon: true,
+      // Enable polygon
+    },
+  });
 
-var drawControl = new L.Control.Draw({
-  draw: {
-    polyline: true, // Disable polyline
-    circlemarker: false, // Disable circlemarker
-    marker: true, // Disable marker
-    circle: false, // Enable circle
-    rectangle: false, // Enable rectangle
-    polygon: true,
-    // Enable polygon
-  },
-});
+  map.addControl(drawControl);
 
-map.addControl(drawControl);
+  map.on("draw:created", function (e) {
+    var type = e.layerType; // Type of shape ('polygon', 'rectangle', 'circle')
+    var layer = e.layer; // The drawn shape layer
+    var center;
+    let htype;
+    // Add the drawn shape to the map
+    map.addLayer(layer);
+    let test = [];
+    // Log the area parameters
+    if (type === "polygon" || type === "rectangle") {
+      var latLngs = layer.getLatLngs()[0];
+      latLngs.forEach((latlng) => {
+        let temp = [latlng.lat, latlng.lng];
+        test.push(temp);
+      });
+      var sumLat = 0,
+        sumLng = 0;
+      var numPoints = latLngs.length;
+      htype = "polygion";
 
-map.on("draw:created", function (e) {
-  var type = e.layerType; // Type of shape ('polygon', 'rectangle', 'circle')
-  var layer = e.layer; // The drawn shape layer
-  var center;
-  let htype;
-  // Add the drawn shape to the map
-  map.addLayer(layer);
-  let test = [];
-  // Log the area parameters
-  if (type === "polygon" || type === "rectangle") {
-    var latLngs = layer.getLatLngs()[0];
-    latLngs.forEach((latlng) => {
-      let temp = [latlng.lat, latlng.lng];
-      test.push(temp);
-    });
-    var sumLat = 0,
-      sumLng = 0;
-    var numPoints = latLngs.length;
-    htype = "polygion";
+      latLngs.forEach(function (latlng) {
+        sumLat += latlng.lat;
+        sumLng += latlng.lng;
+      });
 
-    latLngs.forEach(function (latlng) {
-      sumLat += latlng.lat;
-      sumLng += latlng.lng;
-    });
+      var centroidLat = sumLat / numPoints;
+      var centroidLng = sumLng / numPoints;
 
-    var centroidLat = sumLat / numPoints;
-    var centroidLng = sumLng / numPoints;
+      center = [centroidLat, centroidLng];
+    } else if (type === "polyline") {
+      let polygion = layer.getLatLngs();
+      polygion.forEach((latlng) => {
+        let temp = [latlng.lat, latlng.lng];
+        test.push(temp);
+      });
 
-    center = [centroidLat, centroidLng];
-  } else if (type === "polyline") {
-    let polygion = layer.getLatLngs();
-    polygion.forEach((latlng) => {
-      let temp = [latlng.lat, latlng.lng];
-      test.push(temp);
-    });
+      htype = "line";
 
-    htype = "line";
+      if (polygion.length % 2 === 0) {
+        // Even number of points
+        let midIndex1 = polygion.length / 2 - 1;
+        let midIndex2 = polygion.length / 2;
 
-    if (polygion.length % 2 === 0) {
-      // Even number of points
-      let midIndex1 = polygion.length / 2 - 1;
-      let midIndex2 = polygion.length / 2;
+        let temp1 = (polygion[midIndex1].lat + polygion[midIndex2].lat) / 2;
+        let temp2 = (polygion[midIndex1].lng + polygion[midIndex2].lng) / 2;
 
-      let temp1 = (polygion[midIndex1].lat + polygion[midIndex2].lat) / 2;
-      let temp2 = (polygion[midIndex1].lng + polygion[midIndex2].lng) / 2;
+        center = [temp1, temp2];
+      } else {
+        // Odd number of points
+        let midIndex = Math.floor(polygion.length / 2);
 
-      center = [temp1, temp2];
-    } else {
-      // Odd number of points
-      let midIndex = Math.floor(polygion.length / 2);
-
-      center = [polygion[midIndex].lat, polygion[midIndex].lng];
+        center = [polygion[midIndex].lat, polygion[midIndex].lng];
+      }
+    } else if (type === "marker") {
+      let point = layer.getLatLng();
+      center = [point.lat, point.lng];
+      test = [point.lat, point.lng];
+      htype = "marker";
     }
-  } else if (type === "marker") {
-    let point = layer.getLatLng();
-    center = [point.lat, point.lng];
-    test = [point.lat, point.lng];
-    htype = "marker";
-  }
 
-  console.log(type);
+    console.log(type);
 
-  let z = { center, polygion: test, type: htype };
-  let y = JSON.stringify(z);
-  console.log(y);
-  navigator.clipboard.writeText(y);
-});
+    let z = { center, polygion: test, type: htype };
+    let y = JSON.stringify(z);
+    console.log(y);
+    navigator.clipboard.writeText(y);
+  });
+}
