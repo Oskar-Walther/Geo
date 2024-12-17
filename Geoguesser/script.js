@@ -36,7 +36,6 @@ let polygon;
 
 getCoords("../data/data.json");
 
-
 async function getCoords(file) {
   let x = await fetch(file);
   let y = await x.json();
@@ -116,8 +115,6 @@ function resort() {
     distancelabel.textContent = `${distance} km`;
   }
 
-
-
   switch (true) {
     case typeofshape == "line":
       polygon = L.polyline(polygonCoords);
@@ -136,7 +133,7 @@ function resort() {
       console.log(typeofshape);
   }
 
-  if(debug){
+  if (debug) {
     polygon.addTo(map);
   }
 
@@ -438,23 +435,31 @@ if (debug) {
     navigator.clipboard.writeText(y);
   });
 }
+function loadingscreen() {
+  const loading = document.querySelector(".loading-screen");
+  const bar = document.querySelector(".load-bar");
+  const front = document.createElement("p");
+  front.textContent = "Get better internet";
 
-const loading = document.querySelector(".loading-screen");
-const bar = document.querySelector(".load-bar");
+  document.onreadystatechange = () => {
+    let progress = 0;
 
-document.onreadystatechange = () => {
-  let progress = 0;
+    if (document.readyState === "loading") {
+      progress = 30;
+    } else if (document.readyState === "interactive") {
+      progress = 70;
+    } else if (document.readyState === "complete") {
+      progress = 100;
+      setTimeout(() => {
+        loading.classList.add("hide");
+      }, 500);
+    }
 
-  if (document.readyState === "loading") {
-    progress = 30;
-  } else if (document.readyState === "interactive") {
-    progress = 70;
-  } else if (document.readyState === "complete") {
-    progress = 100;
     setTimeout(() => {
-      loading.classList.add("hide");
-    }, 500);
-  }
+      loading.appendChild(front);
+    }, 20000);
 
-  bar.style.width = progress + "%";
-};
+    bar.style.width = progress + "%";
+  };
+}
+loadingscreen();
