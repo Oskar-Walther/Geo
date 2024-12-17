@@ -177,6 +177,7 @@ body {
 .loading-screen p{
   color: white;
   font-size: 2.5em;
+  text-shadow: 2px 2px 0 black;
 }
 
 .load-container{
@@ -196,6 +197,11 @@ body {
   background-color: var(--loadbarbg);
   width: 0%;
   height: 200%;
+}
+
+.front{
+  animation: fade-in-out 2s ease-in-out infinite;
+  font-size: 1.5em;
 }
 
 .hide{
@@ -222,5 +228,19 @@ body {
 
   .cover{
     padding: 0;
+  }
+}
+
+@keyframes fade-in-out {
+  from{
+    opacity: 1;
+  }
+
+  50%{
+    opacity: 0;
+  }
+
+  to{
+    opacity: 1;
   }
 }

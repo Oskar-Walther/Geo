@@ -438,8 +438,8 @@ if (debug) {
 function loadingscreen() {
   const loading = document.querySelector(".loading-screen");
   const bar = document.querySelector(".load-bar");
-  const front = document.createElement("p");
-  front.textContent = "Get better internet";
+  const front = document.querySelector(".front");
+  
 
   document.onreadystatechange = () => {
     let progress = 0;
@@ -452,14 +452,16 @@ function loadingscreen() {
       progress = 100;
       setTimeout(() => {
         loading.classList.add("hide");
+        loading.remove();
       }, 500);
     }
 
-    setTimeout(() => {
-      loading.appendChild(front);
-    }, 20000);
-
     bar.style.width = progress + "%";
   };
+  
+
+  setTimeout(() => {
+    front.classList.remove("hide");
+  }, 10000);
 }
 loadingscreen();
