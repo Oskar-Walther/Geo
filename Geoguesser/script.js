@@ -438,3 +438,23 @@ if (debug) {
     navigator.clipboard.writeText(y);
   });
 }
+
+const loading = document.querySelector(".loading-screen");
+const bar = document.querySelector(".load-bar");
+
+document.onreadystatechange = () => {
+  let progress = 0;
+
+  if (document.readyState === "loading") {
+    progress = 30;
+  } else if (document.readyState === "interactive") {
+    progress = 70;
+  } else if (document.readyState === "complete") {
+    progress = 100;
+    setTimeout(() => {
+      loading.classList.add("hide");
+    }, 500);
+  }
+
+  bar.style.width = progress + "%";
+};

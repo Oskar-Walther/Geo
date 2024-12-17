@@ -141,7 +141,6 @@ footer {
   background-color: var(--footer);
   padding: 0 30px; /* Ändert abstand vom Rand */
   padding: 2em;
-  animation: fadeout 3s infinite ease;
 }
 
 .text {
@@ -198,18 +197,6 @@ footer {
   }
 }
 
-@keyframes fadeout {
-  from {
-    transform: rotateX(0deg);
-  }
-  25%{
-    transform: rotateX(-20deg);
-  }
-  to {
-    transform: rotateX(90deg);
-  }
-}
-
 @media only screen and (max-width: 1400px) {
   .mybutton {
     grid-template-columns: 1fr;
@@ -220,7 +207,31 @@ footer {
     }
   }
 
-  .mybutton > span {
+  .imgtest {
     display: none;
   }
+
+  header {
+    overflow: hidden;
+    img {
+      display: none;
+    }
+  }
+
+  #header {
+    text-align: center;
+    position: unset;
+    width: auto;
+    width: 100%;
+  }
+
+  .close{
+    width: 24px;
+  }
+
+  .mybutton > span {
+  display: none;
+  }
 }
+
+
