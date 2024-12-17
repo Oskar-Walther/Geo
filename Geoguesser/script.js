@@ -15,8 +15,8 @@ var map = L.map("map", {
   center: [52.52, 13.405],
   zoom: 4,
   maxBounds: [
-    [34, -31],
-    [72, 45],
+    [-85, -180],
+    [85, 180],
   ],
   maxBoundsViscosity: 1,
 });
@@ -24,7 +24,7 @@ var map = L.map("map", {
 L.tileLayer(mapLayer, {
   attribution: '&copy; <a href="https://carto.com/">Carto</a>',
   minZoom: 4,
-  maxZoom: 10,
+  maxZoom: 13,
   subdomains: "abcd",
   noWrap: true,
 }).addTo(map);
