@@ -221,17 +221,31 @@ footer {
   #header {
     text-align: center;
     position: unset;
-    width: auto;
     width: 100%;
   }
 
   .close{
     width: 24px;
+    position: absolute;
+    bottom: 0;
   }
 
   .mybutton > span {
   display: none;
   }
+
+  .text{
+    font-size: 1.4em;
+  }
+
+  .part{
+    display: none;
+  }
 }
 
 
+@media only screen and (max-height: 900px){
+  body{
+    display: none;
+  }
+}
