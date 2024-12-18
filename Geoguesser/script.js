@@ -440,10 +440,10 @@ function loadingscreen() {
   const bar = document.querySelector(".load-bar");
   const front = document.querySelector(".front");
   
-
   document.onreadystatechange = () => {
     let progress = 0;
-
+    
+    
     if (document.readyState === "loading") {
       progress = 30;
     } else if (document.readyState === "interactive") {
