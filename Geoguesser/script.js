@@ -3,13 +3,22 @@ const mapLayer =
 const cover = document.querySelector(".cover");
 const confirm = document.querySelector(".confirm");
 const tasklabel = document.querySelector(".task");
-const debug = true;
+const scorelabel = document.querySelector(".score");
+const distancelabel = document.querySelector(".distance");
+const locationlabel = document.querySelector(".location");
+const currentScoreLabel = document.querySelector(".currentscore");
+const highscoreLabel = document.querySelector(".highscore");
+
+let currentscore = 0;
+let debug = false;
 
 let image = new Image();
 image.src = "../images/location-sign-svgrepo-com.svg";
 
 let image2 = new Image();
 image2.src = "../images/my-location-svgrepo-com.svg";
+
+let confirmaudio = new Audio('../sounds/confirm.mp3');
 
 var map = L.map("map", {
   center: [52.52, 13.405],
@@ -33,6 +42,9 @@ let polygonCoords;
 let center;
 let typeofshape;
 let polygon;
+let locationname;
+
+let logged = [];
 
 getCoords("../data/data.json");
 
@@ -44,18 +56,53 @@ async function getCoords(file) {
   let objects = Object.values(locations);
   let names = Object.keys(locations);
 
-  let len = objects.length;
+  if (debug) {
+    names.map((e) => console.log(e.replace("-", " ")));
+  }
+
+  let random = retrandom(names, logged, names);
+
+  if (random == null) {
+    console.log("lol");
+  } else {
+    let geoobject = objects[random];
+    let geoname = names[random];
+    locationname = geoname;
+
+    typeofshape = geoobject.type;
+
+    center = geoobject.center;
+    polygonCoords = geoobject.polygion;
+
+    tasklabel.textContent = geoname.replace("-", " ");
+    console.log(logged);
+  }
+}
+
+function cloneAudio(audio) {
+  const clonedAudio = new Audio();
+  clonedAudio.src = audio.src;
+  clonedAudio.play();
+  clonedAudio.addEventListener("ended", () => {
+    clonedAudio.remove();
+  });
+}
+
+function retrandom(array1, array2, contain) {
+  let len = array1.length;
 
   let random = Math.floor(Math.random() * len);
-  let geoobject = objects[random];
-  let geoname = names[random];
 
-  typeofshape = geoobject.type;
+  if (len === array2.length) {
+    return null;
+  }
 
-  center = geoobject.center;
-  polygonCoords = geoobject.polygion;
+  while (array2.includes(contain[random])) {
+    random = Math.floor(Math.random() * len);
+  }
 
-  tasklabel.textContent = geoname.replace("-", " ");
+  array2.push(contain[random]);
+  return random;
 }
 
 let currentLine = null;
@@ -79,7 +126,7 @@ let customIcon2 = L.icon({
   popupAnchor: [-3, -76], // Point from which the popup should open relative to the iconAnchor
 });
 
-map.on("click", function (e) {
+function clickhandler(e) {
   lat = e.latlng.lat;
   lng = e.latlng.lng;
   confirm.classList.remove("hide");
@@ -89,9 +136,14 @@ map.on("click", function (e) {
   }
 
   currentImg = L.marker([lat, lng], { icon: customIcon2 }).addTo(map);
+}
+
+map.on("click", (e) => {
+  clickhandler(e);
 });
 
 function resort() {
+  cloneAudio(confirmaudio);
   const elementmap = map.getContainer();
 
   if (currentLine) {
@@ -108,11 +160,9 @@ function resort() {
   map.flyTo([center[0], center[1]], 7);
 
   function applyScore(score, distance) {
-    const scorelabel = document.querySelector(".score");
-    const distancelabel = document.querySelector(".distance");
-
     scorelabel.textContent = `${score}`;
     distancelabel.textContent = `${distance} km`;
+    locationlabel.textContent = locationname;
   }
 
   switch (true) {
@@ -309,7 +359,11 @@ function resort() {
     }
   }
 
+  currentscore += result;
+  console.log(currentscore);
+  
   applyScore(result, distance);
+  
 
   if (result <= 0) result = 0;
   //console.log(result);
@@ -439,11 +493,10 @@ function loadingscreen() {
   const loading = document.querySelector(".loading-screen");
   const bar = document.querySelector(".load-bar");
   const front = document.querySelector(".front");
-  
+
   document.onreadystatechange = () => {
     let progress = 0;
-    
-    
+
     if (document.readyState === "loading") {
       progress = 30;
     } else if (document.readyState === "interactive") {
@@ -458,10 +511,27 @@ function loadingscreen() {
 
     bar.style.width = progress + "%";
   };
-  
 
   setTimeout(() => {
     front.classList.remove("hide");
   }, 10000);
 }
+
 loadingscreen();
+
+function reset() {
+  map.on("click", (e) => {
+    clickhandler(e);
+  });
+  getCoords("../data/data.json");
+  cover.classList.add("hide");
+  tasklabel.parentElement.classList.remove("hide");
+
+  map.setView(map.getCenter(), map.getMinZoom());
+
+  map.eachLayer(function (layer) {
+    if (!(layer instanceof L.TileLayer)) {
+      map.removeLayer(layer);
+    }
+  });
+}

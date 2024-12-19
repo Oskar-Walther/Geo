@@ -244,3 +244,25 @@ body {
     opacity: 1;
   }
 }
+
+.location{
+  color: var(--textcolor);
+  text-shadow: 2px 2px 0 black;
+  font-size: 1.1em;
+}
+
+.currentscore, .highscore{
+  z-index: 9999;
+  position: absolute;
+  bottom: 2px;
+  margin: 6px;
+  font-size: 1.5em;
+}
+
+.currentscore{
+  left: 0;
+}
+
+.highscore{
+  right: 0;
+}
