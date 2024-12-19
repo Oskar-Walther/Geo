@@ -10,6 +10,7 @@ const currentScoreLabel = document.querySelector(".currentscore");
 const highscoreLabel = document.querySelector(".highscore");
 
 let currentscore = 0;
+let highscore = localStorage.getItem("highscore");
 let debug = false;
 
 let image = new Image();
@@ -19,6 +20,7 @@ let image2 = new Image();
 image2.src = "../images/my-location-svgrepo-com.svg";
 
 let confirmaudio = new Audio('../sounds/confirm.mp3');
+let clickaudio = new Audio('../sounds/click.mp3');
 
 var map = L.map("map", {
   center: [52.52, 13.405],
@@ -58,6 +60,7 @@ async function getCoords(file) {
 
   if (debug) {
     names.map((e) => console.log(e.replace("-", " ")));
+    console.log(logged);
   }
 
   let random = retrandom(names, logged, names);
@@ -67,6 +70,7 @@ async function getCoords(file) {
   } else {
     let geoobject = objects[random];
     let geoname = names[random];
+    geoname = geoname.replace("-", " ");
     locationname = geoname;
 
     typeofshape = geoobject.type;
@@ -74,8 +78,7 @@ async function getCoords(file) {
     center = geoobject.center;
     polygonCoords = geoobject.polygion;
 
-    tasklabel.textContent = geoname.replace("-", " ");
-    console.log(logged);
+    tasklabel.textContent = geoname;
   }
 }
 
@@ -140,6 +143,7 @@ function clickhandler(e) {
 
 map.on("click", (e) => {
   clickhandler(e);
+  cloneAudio(clickaudio);
 });
 
 function resort() {
@@ -163,6 +167,14 @@ function resort() {
     scorelabel.textContent = `${score}`;
     distancelabel.textContent = `${distance} km`;
     locationlabel.textContent = locationname;
+    currentScoreLabel.textContent = currentscore;
+
+    if(currentscore > highscore){
+      localStorage.setItem("highscore",currentscore);
+      highscore = localStorage.getItem("highscore");
+    }
+
+    highscoreLabel.textContent = highscore;
   }
 
   switch (true) {
