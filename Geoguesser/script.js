@@ -62,6 +62,7 @@ async function getCoords(file) {
   if (debug) {
     names.map((e) => console.log(e.replace("-", " ")));
     console.log(logged);
+    //showall();
   }
 
   let random = retrandom(names, logged, names);
@@ -80,6 +81,33 @@ async function getCoords(file) {
     polygonCoords = geoobject.polygion;
 
     tasklabel.textContent = geoname;
+  }
+  
+  function showall(){
+    objects.forEach((object,index) => {
+      let names = Object.keys(locations);
+      console.log(names);
+      
+      let name = names[index];
+      switch (true) {
+        case object.type == "line":
+          L.polyline(object.polygion).addTo(map).bindTooltip(name, { permanent: true, direction: "center" });
+          
+          break;
+    
+        case object.type == "marker":
+          L.marker(object.polygion).addTo(map).bindTooltip(name, { permanent: true, direction: "center" });
+          break;
+    
+        case object.type == "polygion":
+          L.polygon(object.polygion).addTo(map).bindTooltip(name, { permanent: true, direction: "center" });
+          break;
+    
+        default:
+          alert("error");
+          console.log(typeofshape);
+      }
+    });
   }
 }
 
