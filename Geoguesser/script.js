@@ -60,7 +60,7 @@ async function getCoords(file) {
   let names = Object.keys(locations);
 
   if (debug) {
-    names.map((e) => console.log(e.replace("-", " ")));
+    names.map((e) => console.log(e.replace(/-/g, " ")));
     console.log(logged);
     //showall();
   }
@@ -68,11 +68,11 @@ async function getCoords(file) {
   let random = retrandom(names, logged, names);
 
   if (random == null) {
-    console.log("lol");
+    win();
   } else {
     let geoobject = objects[random];
     let geoname = names[random];
-    geoname = geoname.replace("-", " ");
+    geoname = geoname.replace(/-/g, " ");
     locationname = geoname;
 
     typeofshape = geoobject.type;
@@ -205,6 +205,10 @@ function resort() {
   map.flyTo([center[0], center[1]], 7);
 
   function applyScore(score, distance) {
+    const g = document.querySelector(".lol");
+    const l = document.querySelector(".gghighscore");
+    const f = document.querySelector(".ggscore");
+
     scorelabel.textContent = `${score}`;
     distancelabel.textContent = `${distance} km`;
     locationlabel.textContent = locationname;
@@ -213,8 +217,12 @@ function resort() {
     if (currentscore > highscore) {
       localStorage.setItem("highscore", currentscore);
       highscore = localStorage.getItem("highscore");
+      g.classList.add("newhighscore");
+      l.classList.add("newhighscore");
+      g.textContent = "New Highscore";
     }
-
+    l.textContent = highscore;
+    f.textContent = currentscore;
     highscoreLabel.textContent = highscore;
   }
 
@@ -247,18 +255,22 @@ function resort() {
         yi = coords[i].lng;
       const xj = coords[j].lat,
         yj = coords[j].lng;
+  
+      // Check if point is in the vertical range of the edge
       const intersect =
         yi > lng !== yj > lng &&
-        lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi;
+        lng < ((xj - xi) * (lng - yi)) / (yj - yi) + xi;
+  
       if (intersect) inside = !inside;
     }
     return inside;
   }
+  
 
   function calculateDistanceToPolygon(lat, lng) {
     const R = 6371; // Earth's radius in km
     const toRadians = (deg) => (deg * Math.PI) / 180;
-
+  
     const haversine = (lat1, lng1, lat2, lng2) => {
       const dLat = toRadians(lat2 - lat1);
       const dLon = toRadians(lng2 - lng1);
@@ -269,7 +281,7 @@ function resort() {
           Math.sin(dLon / 2) ** 2;
       return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     };
-
+  
     const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
       const t = Math.max(
         0,
@@ -283,23 +295,24 @@ function resort() {
       const projLng = lng1 + t * (lng2 - lng1);
       return haversine(lat, lng, projLat, projLng);
     };
-
-    const coords = polygon.getLatLngs()[0];
-
+  
+    const coords = polygon.getLatLngs()[0]; // Adjust based on polygon data structure
+  
     // Check if point is inside the polygon
     if (isPointInPolygon(lat, lng, coords)) {
       return 0; // Distance is 0 if inside the polygon
     }
-
-    return Math.round(
-      Math.min(
-        ...coords.map((p, i) => {
-          const next = coords[(i + 1) % coords.length];
-          return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
-        })
-      )
-    );
+  
+    // Calculate the distance to each edge
+    const distances = coords.map((p, i) => {
+      const next = coords[(i + 1) % coords.length];
+      return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
+    });
+  
+    // Return the minimum distance
+    return Math.round(Math.min(...distances));
   }
+  
 
   function calculateDistanceToLine(lat, lng) {
     // Convert lat/lng to radians
@@ -586,4 +599,18 @@ function reset() {
       map.removeLayer(layer);
     }
   });
+}
+
+function win(){
+  const element = document.querySelector(".result");
+
+  element.classList.remove("hide");
+}
+
+function reveal(element){
+  const scores = document.querySelector(".container");
+  element.classList.add("hide");
+  scores.classList.remove("hide");
+
+
 }

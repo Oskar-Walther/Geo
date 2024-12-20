@@ -19,6 +19,18 @@
     </div>
     <p class="top">Klicke auf <span class="task"></span></p>
 
+    <div class="result hide">
+        <p>Deine Ergebnisse: </p>
+        <button onclick="reveal(this)">Aufdecken</button>
+        <div class="container hide">
+            <p>Dein Score:</p>
+            <p class="lol">Dein Highscore:</p>
+            
+            <p class="ggscore kli">0</p>
+            <p class="gghighscore kli">0</p>
+        </div>
+    </div>
+
     <div class="options">
         <button class="fullscreen" onclick="toggleFullscreen()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/></svg></button>
         <button class="mute" onclick="toggleAudio()"><svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75" stroke="#000000" stroke-width="5"><path d="m39,14-17,15H6V48H22l17,15z" stroke-linejoin="round"/><path d="m49,26 20,24m0-24-20,24" stroke-linecap="round"/></svg></button>
@@ -40,5 +52,6 @@
 </body>
     <script src="../libs/node_modules/leaflet/dist/leaflet.js"></script>
     <script src="../libs/node_modules/leaflet-draw/dist/leaflet.draw.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
     <script src="script.js"></script>
 </html>

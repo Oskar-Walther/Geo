@@ -10,14 +10,14 @@
 :root {
   --bgcolor: rgb(49, 46, 46);
   --textcolor: rgb(219, 0, 201);
-  --generaltextcolor: rgb(12,12,12);
+  --generaltextcolor: rgb(12, 12, 12);
   --clearbgcolor: #304e43;
   --buttoncolor: rgb(33, 105, 187);
   --nexthover: #7e8d58;
   --scoretext: rgb(0, 0, 0);
   --fullscreencolor: rgb(53, 0, 0);
   --fullscreencolorhover: rgb(41, 0, 0);
-  --bordercolorclear: rgb(0,0,0);
+  --bordercolorclear: rgb(0, 0, 0);
   --loadbarbg: rgb(211, 36, 36);
   --loadbg: transparent;
 }
@@ -67,7 +67,6 @@ body {
   padding: 7rem;
 }
 
-
 .next {
   width: fit-content;
   font-size: 2.5em;
@@ -77,16 +76,16 @@ body {
   background-color: var(--next);
   cursor: pointer;
   pointer-events: all;
-  background-color: #7B9A2E;
+  background-color: #7b9a2e;
   padding: 6px;
   box-shadow: 3px 6px 0 #5f7428;
 }
 
-.text{
-    color: var(--textcolor);
-    font-size: 1.4em;
-    font-weight: bold;
-    text-shadow: 2px 2px 0 black;
+.text {
+  color: var(--textcolor);
+  font-size: 1.4em;
+  font-weight: bold;
+  text-shadow: 2px 2px 0 black;
 }
 
 .next:hover {
@@ -108,15 +107,14 @@ body {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: .5s ease;
+  transition: 0.5s ease;
 }
 
-.confirm:hover{
+.confirm:hover {
   scale: 1.1;
 }
 
-
-.options{
+.options {
   position: absolute;
   z-index: 9999;
   width: 25px;
@@ -128,7 +126,7 @@ body {
   margin: 0.5em;
 }
 
-.options button{
+.options button {
   fill: rgb(0, 0, 0);
   background-color: transparent;
   outline: none;
@@ -136,11 +134,11 @@ body {
   cursor: pointer;
 }
 
-.options button:hover{
+.options button:hover {
   fill: rgb(20, 20, 20);
 }
 
-.top{
+.top {
   position: absolute;
   z-index: 1009;
   font-size: 2em;
@@ -151,27 +149,27 @@ body {
   pointer-events: none;
 }
 
-.task{
+.task {
   color: var(--textcolor);
   text-shadow: 2px 2px 0 black;
   text-transform: capitalize;
   font-size: 1.2em;
 }
 
-#map .leaflet-control-attribution{
+#map .leaflet-control-attribution {
   pointer-events: none;
   display: none;
 }
 
-.generaltext{
+.generaltext {
   font-size: 1.3em;
 }
 
-#map{
+#map {
   background-color: var(--bgcolor);
 }
 
-.loading-screen{
+.loading-screen {
   z-index: 9999;
   background-color: rgb(60, 55, 55);
   width: 100%;
@@ -183,13 +181,13 @@ body {
   gap: 2em;
 }
 
-.loading-screen p{
+.loading-screen p {
   color: white;
   font-size: 2.5em;
   text-shadow: 2px 2px 0 black;
 }
 
-.load-container{
+.load-container {
   background-color: var(--loadbg);
   width: 350px;
   height: 50px;
@@ -202,79 +200,79 @@ body {
   overflow: hidden;
 }
 
-.load-bar{
+.load-bar {
   background-color: var(--loadbarbg);
   width: 0%;
   height: 200%;
 }
 
-.front{
+.front {
   animation: fade-in-out 2s ease-in-out infinite;
   font-size: 1.5em;
 }
 
-.hide{
+.hide {
   display: none !important;
 }
 
 @media only screen and (max-width: 850px) {
-  .top{
+  .top {
     font-size: 1.3em;
     width: 80%;
   }
 
-  .task{
+  .task {
     font: 1em;
   }
 
-  .next{
+  .next {
     font-size: 1.1em;
   }
-  .generaltext{
-    font-size: .9em;
+  .generaltext {
+    font-size: 0.9em;
     width: 100%;
     text-align: center;
   }
 
-  .cover{
+  .cover {
     padding: 0;
   }
 
-  .highscore{
-    font-size: 1.8vw  !important;
-  }
-
-  .currentscore{
+  .highscore {
     font-size: 1.8vw !important;
   }
 
-  .scores{
+  .currentscore {
+    font-size: 1.8vw !important;
+  }
+
+  .scores {
     margin: 0em;
   }
 }
 
 @keyframes fade-in-out {
-  from{
+  from {
     opacity: 1;
   }
 
-  50%{
+  50% {
     opacity: 0;
   }
 
-  to{
+  to {
     opacity: 1;
   }
 }
 
-.location{
+.location {
   color: var(--textcolor);
   text-shadow: 2px 2px 0 black;
   font-size: 1.1em;
   text-transform: capitalize;
 }
 
-.scores{
+.scores {
   z-index: 9999;
   position: absolute;
   bottom: 0px;
@@ -284,15 +282,106 @@ body {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
-  gap: .5em;
+  gap: 0.5em;
 }
 
-.currentscore::before{
-  content: 'Dein Score: ';
+.currentscore::before {
+  content: "Dein Score: ";
   color: black;
 }
 
-.highscore::before{
-  content: 'Dein Highscore: ';
+.highscore::before {
+  content: "Dein Highscore: ";
   color: black;
+}
+
+.result {
+  position: absolute;
+  z-index: 10000;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(45deg, #1e5799 0%, #3a137a 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 0;
+  flex-direction: column;
+  animation: flyIn 1s ease;
+  font-size: 3em;
+  color: rgb(255, 94, 0);
+  text-shadow: 2px 2px 0 rgb(0, 0, 0);
+  gap: 1em;
+}
+
+.result button{
+  font-size: .8em;
+  padding: 12px;
+  border: 2px solid black;
+  border-radius: 24px;
+  transition: .5s ease;
+}
+
+.result div {
+  padding: 1em;
+  font-size: 1em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.result button:hover{
+  scale: 1.05;
+}
+
+.result div p{
+  color: #D91656;
+  text-align: center;
+  margin: 0.5em;
+  font-size: 1.1em;
+}
+
+.kli{
+  color: yellow;
+}
+
+.newhighscore {
+  text-align: center;
+  text-shadow: none;
+  filter: drop-shadow(2px 2px 0 black);
+}
+
+.newhighscore {
+  background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+.container{
+  animation: flyIn 2s ease;
+}
+
+@keyframes rainbow_animation {
+  0%,100% {
+      background-position: 0 0;
+  }
+
+  50% {
+      background-position: 100% 0;
+  }
+}
+
+@keyframes flyIn {
+  from {
+    scale: 0;
+    opacity: 0;
+    top: 100%;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+    top: 0%;
+  }
 }
