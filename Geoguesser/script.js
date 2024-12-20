@@ -11,6 +11,7 @@ const highscoreLabel = document.querySelector(".highscore");
 
 let currentscore = 0;
 let highscore = localStorage.getItem("highscore");
+let isMuted = false;
 let debug = false;
 
 let image = new Image();
@@ -19,8 +20,8 @@ image.src = "../images/location-sign-svgrepo-com.svg";
 let image2 = new Image();
 image2.src = "../images/my-location-svgrepo-com.svg";
 
-let confirmaudio = new Audio('../sounds/confirm.mp3');
-let clickaudio = new Audio('../sounds/click.mp3');
+let confirmaudio = new Audio("../sounds/confirm.mp3");
+let clickaudio = new Audio("../sounds/click.mp3");
 
 var map = L.map("map", {
   center: [52.52, 13.405],
@@ -83,12 +84,24 @@ async function getCoords(file) {
 }
 
 function cloneAudio(audio) {
+  if(isMuted) return;
   const clonedAudio = new Audio();
   clonedAudio.src = audio.src;
   clonedAudio.play();
   clonedAudio.addEventListener("ended", () => {
     clonedAudio.remove();
   });
+}
+
+function toggleAudio(){
+  const button = document.querySelector(".mute");
+
+  isMuted = !isMuted;
+  console.log(isMuted);
+  
+
+  if(isMuted) button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75"><path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z" style="stroke:#111;stroke-width:5;stroke-linejoin:round;fill:#111;"/><path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke:#111;stroke-width:5;stroke-linecap:round"/></svg>`
+  if(!isMuted) button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75" stroke="#111" stroke-width="5"><path d="m39,14-17,15H6V48H22l17,15z" fill="#111" stroke-linejoin="round"/><path d="m49,26 20,24m0-24-20,24" fill="none" stroke-linecap="round"/></svg>`
 }
 
 function retrandom(array1, array2, contain) {
@@ -169,8 +182,8 @@ function resort() {
     locationlabel.textContent = locationname;
     currentScoreLabel.textContent = currentscore;
 
-    if(currentscore > highscore){
-      localStorage.setItem("highscore",currentscore);
+    if (currentscore > highscore) {
+      localStorage.setItem("highscore", currentscore);
       highscore = localStorage.getItem("highscore");
     }
 
@@ -372,10 +385,8 @@ function resort() {
   }
 
   currentscore += result;
-  console.log(currentscore);
-  
+
   applyScore(result, distance);
-  
 
   if (result <= 0) result = 0;
   //console.log(result);
@@ -418,6 +429,7 @@ function toggleFullscreen() {
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/></svg>';
   }
 }
+
 if (debug) {
   var drawControl = new L.Control.Draw({
     draw: {
