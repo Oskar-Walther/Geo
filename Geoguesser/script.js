@@ -82,27 +82,33 @@ async function getCoords(file) {
 
     tasklabel.textContent = geoname;
   }
-  
-  function showall(){
-    objects.forEach((object,index) => {
+
+  function showall() {
+    objects.forEach((object, index) => {
       let names = Object.keys(locations);
       console.log(names);
-      
+
       let name = names[index];
       switch (true) {
         case object.type == "line":
-          L.polyline(object.polygion).addTo(map).bindTooltip(name, { permanent: true, direction: "center" });
-          
+          L.polyline(object.polygion)
+            .addTo(map)
+            .bindTooltip(name, { permanent: true, direction: "center" });
+
           break;
-    
+
         case object.type == "marker":
-          L.marker(object.polygion).addTo(map).bindTooltip(name, { permanent: true, direction: "center" });
+          L.marker(object.polygion)
+            .addTo(map)
+            .bindTooltip(name, { permanent: true, direction: "center" });
           break;
-    
+
         case object.type == "polygion":
-          L.polygon(object.polygion).addTo(map).bindTooltip(name, { permanent: true, direction: "center" });
+          L.polygon(object.polygion)
+            .addTo(map)
+            .bindTooltip(name, { permanent: true, direction: "center" });
           break;
-    
+
         default:
           alert("error");
           console.log(typeofshape);
@@ -112,7 +118,7 @@ async function getCoords(file) {
 }
 
 function cloneAudio(audio) {
-  if(isMuted) return;
+  if (isMuted) return;
   const clonedAudio = new Audio();
   clonedAudio.src = audio.src;
   clonedAudio.play();
@@ -121,15 +127,16 @@ function cloneAudio(audio) {
   });
 }
 
-function toggleAudio(){
+function toggleAudio() {
   const button = document.querySelector(".mute");
 
   isMuted = !isMuted;
   console.log(isMuted);
-  
 
-  if(isMuted) button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75"><path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z" style="stroke:#111;stroke-width:5;stroke-linejoin:round;fill:#111;"/><path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke:#111;stroke-width:5;stroke-linecap:round"/></svg>`
-  if(!isMuted) button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75" stroke="#111" stroke-width="5"><path d="m39,14-17,15H6V48H22l17,15z" fill="#111" stroke-linejoin="round"/><path d="m49,26 20,24m0-24-20,24" fill="none" stroke-linecap="round"/></svg>`
+  if (isMuted)
+    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75"><path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z" style="stroke:#111;stroke-width:5;stroke-linejoin:round;fill:#111;"/><path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke:#111;stroke-width:5;stroke-linecap:round"/></svg>`;
+  if (!isMuted)
+    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75" stroke="#111" stroke-width="5"><path d="m39,14-17,15H6V48H22l17,15z" fill="#111" stroke-linejoin="round"/><path d="m49,26 20,24m0-24-20,24" fill="none" stroke-linecap="round"/></svg>`;
 }
 
 function retrandom(array1, array2, contain) {
@@ -255,22 +262,18 @@ function resort() {
         yi = coords[i].lng;
       const xj = coords[j].lat,
         yj = coords[j].lng;
-  
-      // Check if point is in the vertical range of the edge
       const intersect =
         yi > lng !== yj > lng &&
-        lng < ((xj - xi) * (lng - yi)) / (yj - yi) + xi;
-  
+        lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi;
       if (intersect) inside = !inside;
     }
     return inside;
   }
-  
 
   function calculateDistanceToPolygon(lat, lng) {
     const R = 6371; // Earth's radius in km
     const toRadians = (deg) => (deg * Math.PI) / 180;
-  
+
     const haversine = (lat1, lng1, lat2, lng2) => {
       const dLat = toRadians(lat2 - lat1);
       const dLon = toRadians(lng2 - lng1);
@@ -281,7 +284,7 @@ function resort() {
           Math.sin(dLon / 2) ** 2;
       return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     };
-  
+
     const pointToSegmentDist = (lat, lng, lat1, lng1, lat2, lng2) => {
       const t = Math.max(
         0,
@@ -295,24 +298,23 @@ function resort() {
       const projLng = lng1 + t * (lng2 - lng1);
       return haversine(lat, lng, projLat, projLng);
     };
-  
-    const coords = polygon.getLatLngs()[0]; // Adjust based on polygon data structure
-  
+
+    const coords = polygon.getLatLngs()[0];
+
     // Check if point is inside the polygon
     if (isPointInPolygon(lat, lng, coords)) {
       return 0; // Distance is 0 if inside the polygon
     }
-  
-    // Calculate the distance to each edge
-    const distances = coords.map((p, i) => {
-      const next = coords[(i + 1) % coords.length];
-      return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
-    });
-  
-    // Return the minimum distance
-    return Math.round(Math.min(...distances));
+
+    return Math.round(
+      Math.min(
+        ...coords.map((p, i) => {
+          const next = coords[(i + 1) % coords.length];
+          return pointToSegmentDist(lat, lng, p.lat, p.lng, next.lat, next.lng);
+        })
+      )
+    );
   }
-  
 
   function calculateDistanceToLine(lat, lng) {
     // Convert lat/lng to radians
@@ -415,7 +417,7 @@ function resort() {
 
   //console.log(`Distance: ${distance} km`);
 
-  result = Calcresult(distance, 100, 0.5);
+  result = Calcresult(distance, 50, 0.5);
 
   function Calcresult(distance, radius, factor) {
     if (maxpoints - distance >= maxpoints - radius) {
@@ -601,16 +603,14 @@ function reset() {
   });
 }
 
-function win(){
+function win() {
   const element = document.querySelector(".result");
 
   element.classList.remove("hide");
 }
 
-function reveal(element){
+function reveal(element) {
   const scores = document.querySelector(".container");
   element.classList.add("hide");
   scores.classList.remove("hide");
-
-
 }
