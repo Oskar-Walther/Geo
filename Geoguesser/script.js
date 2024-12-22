@@ -605,8 +605,14 @@ function reset() {
 
 function win() {
   const element = document.querySelector(".result");
+  const element2 = document.querySelector(".top");
+  const element3 = document.querySelector(".options");
+  const tlt = document.querySelector(".leaflet-top");
 
   element.classList.remove("hide");
+  element2.classList.add("hide");
+  element3.classList.add("hide");
+  tlt.classList.add("hide");
 }
 
 function reveal(element) {
