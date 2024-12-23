@@ -611,6 +611,7 @@ function win() {
   const element2 = document.querySelector(".top");
   const element3 = document.querySelector(".options");
   const tlt = document.querySelector(".leaflet-top");
+  map.off();
 
   element.classList.remove("hide");
   element2.classList.add("hide");

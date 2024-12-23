@@ -376,12 +376,15 @@ body {
   justify-content: center;
   align-items: center;
   flex: 0 1 1;
-  gap: 1em;
   width: 40%;
-  height: fit-content;
+  height: auto;
+  min-width: 200px;
+  gap: 1em;
   svg{
     width: 36px;
     height: 36px;
+    padding: 0;
+    margin: 0;
   }
 }
 
