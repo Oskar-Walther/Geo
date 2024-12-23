@@ -46,7 +46,7 @@ let center;
 let typeofshape;
 let polygon;
 let locationname;
-
+let totallength;
 let logged = [];
 
 getCoords("../data/data.json");
@@ -64,6 +64,8 @@ async function getCoords(file) {
     console.log(logged);
     //showall();
   }
+
+  totallength = names.length;
 
   let random = retrandom(names, logged, names);
 
@@ -86,7 +88,7 @@ async function getCoords(file) {
   function showall() {
     objects.forEach((object, index) => {
       let names = Object.keys(locations);
-      console.log(names);
+      //console.log(names);
 
       let name = names[index];
       switch (true) {
@@ -94,7 +96,6 @@ async function getCoords(file) {
           L.polyline(object.polygion)
             .addTo(map)
             .bindTooltip(name, { permanent: true, direction: "center" });
-
           break;
 
         case object.type == "marker":
@@ -123,7 +124,7 @@ function cloneAudio(audio) {
   clonedAudio.src = audio.src;
   clonedAudio.play();
   clonedAudio.addEventListener("ended", () => {
-    clonedAudio.remove();
+  clonedAudio.remove();
   });
 }
 
@@ -215,11 +216,13 @@ function resort() {
     const g = document.querySelector(".lol");
     const l = document.querySelector(".gghighscore");
     const f = document.querySelector(".ggscore");
+    const el =  document.querySelector(".count");
 
     scorelabel.textContent = `${score}`;
     distancelabel.textContent = `${distance} km`;
     locationlabel.textContent = locationname;
     currentScoreLabel.textContent = currentscore;
+    el.textContent = totallength - logged.length;
 
     if (currentscore > highscore) {
       localStorage.setItem("highscore", currentscore);

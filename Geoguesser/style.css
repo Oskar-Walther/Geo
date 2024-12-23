@@ -236,7 +236,7 @@ body {
   text-transform: capitalize;
 }
 
-.scores {
+.scores,.extras {
   z-index: 9999;
   position: absolute;
   bottom: 0px;
@@ -285,18 +285,38 @@ body {
   transition: .5s ease;
 }
 
-.result div {
+.result > div {
   font-size: 1em;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr;
+  grid-template-areas: 
+    'score'
+    'score'
+    'restart';
+  gap: 1em;
 }
+
+.result > div .score {
+  grid-area: score;
+}
+
+.result > div .restart {
+  grid-area: restart;
+}
+
 
 .result button:hover{
   scale: 1.05;
 }
 
-.result div p{
+.scorecontainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.scorecontainer p{
   color: #D91656;
   text-align: center;
   margin: 0.2em;
@@ -304,7 +324,7 @@ body {
 }
 
 .kli{
-  color: yellow;
+  color: yellow !important;
 }
 
 .newhighscore {
@@ -324,6 +344,45 @@ body {
 
 .container{
   animation: flyIn 2s ease;
+}
+
+.extras{
+  right: 0;
+}
+
+.count{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.count::before{
+  content: 'Guesses Übrig: ';
+  color: black;
+}
+
+.restartcontainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 0.5em;
+  flex: 1 1 0;
+  width: 100%;
+}
+
+.restartcontainer button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 1 1;
+  gap: 1em;
+  width: 40%;
+  height: fit-content;
+  svg{
+    width: 36px;
+    height: 36px;
+  }
 }
 
 @keyframes rainbow_animation {
@@ -347,7 +406,7 @@ body {
   }
 }
 
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 950px) {
   .top {
     font-size: 1.3em;
     width: 80%;
@@ -370,16 +429,16 @@ body {
     padding: 0;
   }
 
-  .highscore {
+  .highscore, .currentscore, .count {
     font-size: 1.8vw !important;
   }
 
-  .currentscore {
-    font-size: 1.8vw !important;
+  .result div > button{
+    font-size: 0;
   }
 
   .scores {
-    margin: 0em;
+    margin: 8px 16px;
   }
 
   .result > p{
@@ -391,9 +450,7 @@ body {
   }
 
   .result div{
-    font-size: .1em;
     padding: 0;
     margin: 0;
-    background-color: #5f7428;
   }
 }
