@@ -613,10 +613,17 @@ function win() {
   const tlt = document.querySelector(".leaflet-top");
   map.off();
 
-  element.classList.remove("hide");
   element2.classList.add("hide");
   element3.classList.add("hide");
   tlt.classList.add("hide");
+
+  map.on('load',() =>{
+    element.classList.remove("hide");
+  })
+
+  map.whenReady(() => {
+    map.fire('load');
+  });
 }
 
 function reveal(element) {
