@@ -56,6 +56,10 @@ header > img {
   height: 3rem;
 }
 
+.github span{
+  cursor: pointer;
+}
+
 .gh{
   display: flex;
   justify-content: center;
@@ -161,6 +165,7 @@ footer {
   background-color: var(--footer);
   padding: 0 30px; /* Ändert abstand vom Rand */
   padding: 2em;
+  transition: .5s ease all;
 }
 
 .text {
@@ -217,7 +222,9 @@ footer {
 }
 
 .hide {
-  display: none;
+  opacity: 0;
+  position: absolute;
+  left: -9600px;
 }
 
 .small {
@@ -245,6 +252,7 @@ footer {
   color: white;
   position: absolute;
   top: -80px;
+  transition: .5s ease;
 }
 
 .dropdown::after{

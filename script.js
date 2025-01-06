@@ -13,3 +13,13 @@ function closeFooter(element) {
     element.innerHTML = down;
   }
 }
+
+function expand(element) {
+  console.log(element);
+  
+  if (element.classList.contains("hide")) {
+    element.classList.remove("hide");
+  } else {
+    element.classList.add("hide");
+  }
+}
