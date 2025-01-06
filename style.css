@@ -44,6 +44,25 @@ header > img {
   position: relative;
 }
 
+.github{
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+}
+
+.github img{
+  height: 3rem;
+}
+
+.gh{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 #header {
   color: var(--headcolor);
   font-size: 4em;
@@ -149,6 +168,17 @@ footer {
   letter-spacing: 2px;
   font-size: 1.8em;
   text-shadow: 2px 2px 0 black;
+  transition: .5s ease all;
+}
+
+.text:hover:not(p,label){
+  cursor: pointer;
+  color: #ff3b3b;
+}
+
+.text:active:not(p,label){
+  cursor: pointer;
+  color: #c71b1b;
 }
 
 .maintext {
@@ -202,6 +232,33 @@ footer {
   to {
     opacity: 1;
   }
+}
+
+.dropdown{
+  background-color: rgb(5,5,5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1em;
+  border-radius: 2em;
+  color: white;
+  position: absolute;
+  top: -80px;
+}
+
+.dropdown::after{
+  content: '';
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 12px solid rgb(5, 5, 5);
+  position: absolute;
+  bottom: -12px;
+}
+
+.dropdown a{
+  color: var(--textcolor);
+  font-size: 16px !important;
 }
 
 @media only screen and (max-width: 1400px) {
