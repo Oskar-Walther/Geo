@@ -48,6 +48,7 @@ let polygon;
 let locationname;
 let totallength;
 let logged = [];
+let visible = false;
 
 getCoords("../data/data.json");
 
@@ -182,7 +183,7 @@ function clickhandler(e) {
   lat = e.latlng.lat;
   lng = e.latlng.lng;
   confirm.classList.remove("hide");
-
+  visible = true;
   if (currentImg) {
     map.removeLayer(currentImg);
   }
@@ -239,6 +240,7 @@ function resort() {
   switch (true) {
     case typeofshape == "line":
       polygon = L.polyline(polygonCoords);
+      polygon.addTo(map);
       break;
 
     case typeofshape == "marker":
@@ -407,6 +409,7 @@ function resort() {
   switch (true) {
     case typeofshape === "line":
       distance = calculateDistanceToLine(lat, lng);
+      map.
       break;
 
     case typeofshape === "marker":
@@ -437,6 +440,7 @@ function resort() {
   if (result <= 0) result = 0;
   //console.log(result);
   map.off("click");
+  visible = false;
 
   setTimeout(() => {
     cover.classList.remove("hide");
@@ -611,7 +615,7 @@ function win() {
   const element2 = document.querySelector(".top");
   const element3 = document.querySelector(".options");
   const tlt = document.querySelector(".leaflet-top");
-  map.off();
+  map.off("click");
 
   element2.classList.add("hide");
   element3.classList.add("hide");
@@ -631,3 +635,26 @@ function reveal(element) {
   element.classList.add("hide");
   scores.classList.remove("hide");
 }
+
+window.addEventListener("keydown",e =>{
+  if((e.keyCode == 13 && visible)){
+    resort()
+  }
+
+  if(e.keyCode == 13 && !cover.classList.contains("hide")){
+    reset()
+  }
+})
+
+function help(){
+  const help = document.querySelector("#help");
+  const parenthelp = help.parentElement;
+
+  if(parenthelp.classList.contains("hide")){
+    parenthelp.classList.remove("hide");
+  } else {
+    parenthelp.classList.add("hide");
+  }
+}
+
+help()

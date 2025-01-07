@@ -39,7 +39,8 @@
 
     <div class="options">
         <button class="fullscreen" onclick="toggleFullscreen()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/></svg></button>
-        <button class="mute" onclick="toggleAudio()"><svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75" stroke="#000000" stroke-width="5"><path d="m39,14-17,15H6V48H22l17,15z" stroke-linejoin="round"/><path d="m49,26 20,24m0-24-20,24" stroke-linecap="round"/></svg></button>
+        <button class="mute" onclick="toggleAudio()"><svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 75 75"><path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z" style="stroke:#111;stroke-width:5;stroke-linejoin:round;fill:#111;"/><path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke:#111;stroke-width:5;stroke-linecap:round"/></svg></button>
+        <button onclick="help()" class="information">i</button>
     </div>
 
     <div id="map"></div>
@@ -57,6 +58,16 @@
     </div>
     
     <button class="confirm hide" onclick="resort()">Bestätigen</button>
+
+    <div class="blur" onclick="help()">
+        <div id="help">
+            <h2>Hilfe</h2>
+            <p>Deine Aufgabe in dem Spiel ist, denn oben angegeben Ort auf der Karte zu finden. Wenn du dir sicher bist dan klicke auf die Location die du als richtig empfindest und dann bestätige diese. Das Spiel wird dir sagen wie weit/nah du vom Ziel entfernt warst. Wenn du alle Ziele gefunden hast gibt es am Ende eine Auswertung wo du dich selber messen kannst!</p>
+            <h3>Viel Spaß beim Spielen</h3>
+            <span onclick="help()"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></span>
+        </div>
+    </div>
+    
     
 </body>
     <script src="../libs/node_modules/leaflet/dist/leaflet.js"></script>
