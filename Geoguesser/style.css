@@ -50,7 +50,7 @@ body {
 }
 
 .cover {
-  height: 20%;
+  height: 25%;
   position: absolute;
   background-color: var(--clearbgcolor);
   bottom: 16px;
@@ -66,6 +66,7 @@ body {
   pointer-events: none;
   border: 6px double var(--bordercolorclear);
   padding: 7rem;
+  overflow: hidden;
 }
 
 .next {
@@ -80,6 +81,7 @@ body {
   background-color: #7b9a2e;
   padding: 6px;
   box-shadow: 3px 6px 0 #5f7428;
+  margin: .5em;
 }
 
 .text {
