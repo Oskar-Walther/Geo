@@ -649,6 +649,7 @@ window.addEventListener("keydown",e =>{
 function help(){
   const help = document.querySelector("#help");
   const parenthelp = help.parentElement;
+  
 
   if(parenthelp.classList.contains("hide")){
     parenthelp.classList.remove("hide");
