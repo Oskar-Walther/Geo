@@ -36,7 +36,7 @@ var map = L.map("map", {
 
 L.tileLayer(mapLayer, {
   attribution: '&copy; <a href="https://carto.com/">Carto</a>',
-  minZoom: 3,
+  minZoom: 4,
   maxZoom: 19,
   subdomains: "abcd",
   noWrap: true,
@@ -410,7 +410,6 @@ function resort() {
   switch (true) {
     case typeofshape === "line":
       distance = calculateDistanceToLine(lat, lng);
-      map.
       break;
 
     case typeofshape === "marker":
