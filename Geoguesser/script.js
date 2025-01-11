@@ -36,8 +36,8 @@ var map = L.map("map", {
 
 L.tileLayer(mapLayer, {
   attribution: '&copy; <a href="https://carto.com/">Carto</a>',
-  minZoom: 4,
-  maxZoom: 13,
+  minZoom: 3,
+  maxZoom: 19,
   subdomains: "abcd",
   noWrap: true,
 }).addTo(map);
