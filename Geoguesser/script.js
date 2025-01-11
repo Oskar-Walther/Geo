@@ -31,6 +31,7 @@ var map = L.map("map", {
     [85, 180],
   ],
   maxBoundsViscosity: 1,
+  doubleClickZoom: true
 });
 
 L.tileLayer(mapLayer, {
